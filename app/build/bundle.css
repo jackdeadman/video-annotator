@@ -1,0 +1,64 @@
+:root {
+    --speakers-width: 100px;
+}
+
+._38SBDOyGNEZkqxVEyP50vA {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: [col1-start] 100px  [col2-start] 100px  [col3-start] 100px [col3-end];
+    grid-template-rows: [row1-start] auto [row2-start] auto [row2-end];
+    background-color: #fff;
+    color: #444;
+}
+
+._k4mS1JPIlaWEJEgb65su {
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 150%;
+}
+
+.skoC9MwT84UpiyNo3ESf4 {
+    grid-column: col1-start / col3-start;
+    grid-row: row1-start;
+}
+
+.zOufaHvkRw7U9YUFyIco2 {
+    grid-column: col3-start;
+    grid-row: row1-start / row2-end;
+    width: var(--speakers-width)
+}
+
+.p1_ISwhJOKze9Ge59GyEk {
+    grid-column: col1-start / col3-start;
+    grid-row: row2-start;
+}
+
+/*
+ * Global constants goes here
+ */
+:root {
+    --primary-color: #42b983;
+}
+
+
+/*
+ * Global CSS goes here, it requires to use :global before each style
+ */
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    margin: auto;
+}
+#app {
+    color: #2c3e50;
+    font-family: Source Sans Pro, Helvetica, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    color: var(--primary-color)
+}
