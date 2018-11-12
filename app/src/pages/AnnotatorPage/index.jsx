@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react'
-import { readFile, waitFor } from '../../utils';
+import { readFile } from '../../utils';
 
 import ProjectEditor from '../../components/ProjectEditor';
 import Project from '../../classes/Project';
@@ -10,11 +10,13 @@ const AnnotatorPage = function({ projectFilePath }) {
     const [ project, setProject ] = useState(null);
 
     useEffect(async function() {
-        await waitFor(2000)
-        const file = await readFile(projectFilePath);
-        const project = new Project(projectFilePath, JSON.parse(file))
-        setProject(project);
+        if (project == null) {
+            const file = await readFile(projectFilePath);
+            const project = new Project(projectFilePath, JSON.parse(file))
+            setProject(project);
+        }
     });
+
 
     return (
         project == null

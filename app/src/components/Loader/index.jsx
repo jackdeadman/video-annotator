@@ -3,7 +3,7 @@ import styles from './styles.css';
 
 const Loader = function({ children }) {
     return (
-        <div className={styles.loader}>{ children }</div>
+        <div className={styles.loader}>{ children }...</div>
     );
 };
 
