@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import { Player } from 'video-react';
-import Main from './pages/AnnotatorPage';
+import AnnotatorPage from './pages/AnnotatorPage';
 
-const VIDEO_URL = `src/assets/video/S20_U01_boxes.mp4`
+const VIDEO_URL = `src/assets/video/S20_U01_boxes.mp4`;
+const projectFilePath = '/home/jack/Documents/tools/video-annotator/example-project/project.json';
 
 export default class App extends Component {
     render() {
@@ -11,7 +12,7 @@ export default class App extends Component {
             <div>
                 <div className="hello">
                     <h1>Video Annotator</h1>
-                    <Main />
+                    <AnnotatorPage projectFilePath={projectFilePath}/>
                     {/* <Player
                         src={VIDEO_URL}
                     /> */}

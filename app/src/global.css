@@ -2,7 +2,11 @@
  * Global constants goes here
  */
 :root {
-    --primary-color: #42b983;
+    --primary-color: #195145;
+    --secondary-color: #F3D3BD;
+    --white: #C9C8C7;
+    --black: #333333;
+    --gray: #d3dce6;
 }
 
 
@@ -15,13 +19,16 @@
 :global body {
     height: 100%;
     margin: auto;
+    background: var(--white);
+    font-family: Source Sans Pro, Helvetica, sans-serif;
 }
 :global #app {
     color: #2c3e50;
     font-family: Source Sans Pro, Helvetica, sans-serif;
     text-align: center;
+    
 }
 
 h1 {
-    color: var(--primary-color)
+    color: var(--black)
 }

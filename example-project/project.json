@@ -1,0 +1,15 @@
+{
+    "project_name": "Example Project",
+    "created_at": "",
+    "updated_at": "",
+
+    "folders": {
+        "labels": "labels",
+        "videos": "videos"
+    },
+
+    "scenes": [
+        "S20"
+    ]
+
+}
