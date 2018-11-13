@@ -35,7 +35,11 @@ const ProjectEditor = function({ project }) {
     return (
         <div className={styles.page}>
             <div className={classNames(styles.video, styles.box)}>
-                <VideoAnnotator video={project.videos[0]} annotations={annotations} />
+                <VideoAnnotator
+                    video={project.videos[0]}
+                    annotations={annotations}
+                    speaker={selectedPerson}
+                />
             </div>
             <div className={classNames(styles.speakers, styles.box)}>
                 <SpeakerSelector onColorChange={updateColor} onChange={setSelectedPerson} people={people} selectedPerson={selectedPerson} />

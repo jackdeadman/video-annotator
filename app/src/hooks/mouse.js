@@ -30,14 +30,17 @@ export function useMousePositionRelative(element) {
     };
 }
 
-export function useMouseDrag(element) {
+export function useMouseDrag(element, contraints=[]) {
     const mousePosition = useMousePositionRelative(element);
     const [ startPosition, setStartPosition] = useState({...mousePosition});
     const [ dragging, setDragging ] = useState(false);
+    let valid = true;
 
     function handleMouseDown(e) {
         setStartPosition(mousePosition)
-        setDragging(true);
+        valid = contraints.every(fn => fn(mousePosition))
+        // Only set dragging to true if it meets the constraints
+        setDragging(valid)
     }
 
     function handleMouseUp(e) {

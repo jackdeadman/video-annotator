@@ -1,0 +1,11 @@
+.guide {
+    position: absolute;
+    opacity: 0.6;
+}
+
+.annotation {
+    position: absolute;
+    opacity: 0.8;
+    cursor: move;
+    z-index: 100;
+}
