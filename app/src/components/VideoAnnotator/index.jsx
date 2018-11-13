@@ -4,7 +4,7 @@ import styles from './styles.css';
 import { useMouseDrag } from '../../hooks/mouse';
 import { isEqualObjects } from '../../utils';
 
-import DragGuide from '../../components/';
+import DragGuide from '../../components/DragGuide';
 
 const canvasRef = React.createRef();
 
@@ -27,7 +27,7 @@ const VideoAnnotator = function({ video, current, annotations, annotating }) {
 
     return (
         <div ref={canvasRef} className={styles.drawer}>
-            {/* { dragging || <DragGuide { ...mousePosition }/> } */}
+            { dragging && <DragGuide { ...mousePosition }/> }
         </div>
     );
 };

@@ -4,4 +4,5 @@
     display: block;
 
     cursor: crosshair;
+    position: relative;
 }

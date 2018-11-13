@@ -45,6 +45,13 @@
     display: block;
 
     cursor: crosshair;
+    position: relative;
+}._3CVx8bHlYb6k0v2UfyCxRK {
+    height: 100px;
+    width: 100px;
+    background-color: pink;
+
+    position: absolute;
 }._1mW5LFjogm5eK_b_bNfXs2 {
     display: grid;
     grid-template-columns: 100px auto;

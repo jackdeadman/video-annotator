@@ -22,3 +22,10 @@ export const isEqualObjects = function(obj1, obj2) {
 
     return true;
 };
+
+export const flip = function(fn) {
+    return function(...args) {
+        args.reverse();
+        return fn(...args)
+    }
+}
