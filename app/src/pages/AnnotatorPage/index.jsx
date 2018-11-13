@@ -15,7 +15,7 @@ const AnnotatorPage = function({ projectFilePath }) {
             const project = new Project(projectFilePath, JSON.parse(file))
             setProject(project);
         }
-    });
+    }, [ project ]);
 
 
     return (

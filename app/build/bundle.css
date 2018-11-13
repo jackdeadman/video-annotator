@@ -41,8 +41,10 @@
 }
 ._3B1lhZ7-ecgYBI1o5uOoF {
     width: 100%;
-    height: 100%;
+    height: 600px;
     display: block;
+
+    cursor: crosshair;
 }._1mW5LFjogm5eK_b_bNfXs2 {
     display: grid;
     grid-template-columns: 100px auto;
