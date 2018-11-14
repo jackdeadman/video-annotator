@@ -56,6 +56,52 @@
     opacity: 0.8;
     cursor: move;
     z-index: 100;
+}
+
+._3-Uu35DU5dfsuUjYdNwA6z {
+    position: absolute;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    z-index: 200;
+
+    width: 100%;
+    height: 100%;
+}
+
+:root {
+    --handle-size: 16px;
+}
+
+._3rUZwPkAJMVm1uHnFg9vn4 {
+    background-image:
+        radial-gradient(
+        circle closest-side,
+        #cccccc,
+        #7e756f);
+    position: absolute;
+    height: var(--handle-size);
+    width: var(--handle-size);
+    border-radius: 50%;
+}
+
+._3vI3lGjg4gKm_OVXmso_xz {
+    top: calc(var(--handle-size) / -2);
+    left: calc(var(--handle-size) / -2);
+}
+
+._1GQcxFxjVGXuLL7-PMPKUH {
+    top: calc(var(--handle-size) / -2);
+    right: calc(var(--handle-size) / -2);
+}
+
+.pkP9-P7Sx12G4-y2xPejk {
+    bottom: calc(var(--handle-size) / -2);
+    left: calc(var(--handle-size) / -2);
+}
+
+._21Zc8KA3l7QhjTkJoaMd-C {
+    bottom: calc(var(--handle-size) / -2);
+    right: calc(var(--handle-size) / -2);
 }._1mW5LFjogm5eK_b_bNfXs2 {
     display: grid;
     grid-template-columns: 100px auto;

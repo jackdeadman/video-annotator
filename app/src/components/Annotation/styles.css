@@ -9,3 +9,49 @@
     cursor: move;
     z-index: 100;
 }
+
+.resizer {
+    position: absolute;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    z-index: 200;
+
+    width: 100%;
+    height: 100%;
+}
+
+:root {
+    --handle-size: 16px;
+}
+
+.handle {
+    background-image:
+        radial-gradient(
+        circle closest-side,
+        #cccccc,
+        #7e756f);
+    position: absolute;
+    height: var(--handle-size);
+    width: var(--handle-size);
+    border-radius: 50%;
+}
+
+.handle1 {
+    top: calc(var(--handle-size) / -2);
+    left: calc(var(--handle-size) / -2);
+}
+
+.handle2 {
+    top: calc(var(--handle-size) / -2);
+    right: calc(var(--handle-size) / -2);
+}
+
+.handle3 {
+    bottom: calc(var(--handle-size) / -2);
+    left: calc(var(--handle-size) / -2);
+}
+
+.handle4 {
+    bottom: calc(var(--handle-size) / -2);
+    right: calc(var(--handle-size) / -2);
+}

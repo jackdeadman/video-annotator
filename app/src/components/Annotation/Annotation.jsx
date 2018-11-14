@@ -4,17 +4,23 @@ import styles from './styles.css';
 import { calcBoxStyles, insideBox, insideBox2 } from './helpers';
 import { useMouseDrag } from '../../hooks/mouse';
 import { diff, add } from '../../utils';
+import Resizer from './Resizer';
+import { setServers } from 'dns';
 
 
-const Annotation = function({ start, end, speaker, canvas, onChange }) {
+const Annotation = function({ start, end, speaker, canvas, onChange, selectedSpeaker, onSelect }) {
     const box = { start, end };
+    const selected = speaker.color === selectedSpeaker.color;
+
     // State
     const { mousePosition, dragging } = useMouseDrag(canvas);
-    const [ draggingThisBox, setDraggingThisBox ] = useState(isDraggingBox(dragging, box, mousePosition));
+    const isDraggingBox = selected && dragging && insideBox(box, mousePosition.end);
+    const [ draggingThisBox, setDraggingThisBox ] = useState(isDraggingBox);
+
 
     useEffect(() => {
         // Finished when we are no longer dragging the box
-        const finishedDrag = !isDraggingBox(dragging, box, mousePosition)
+        const finishedDrag = !isDraggingBox
         
         if (finishedDrag && draggingThisBox) {
             onChange({
@@ -34,13 +40,16 @@ const Annotation = function({ start, end, speaker, canvas, onChange }) {
         customStyles = calcBoxStyles(updatedBox, speaker.color)
     }
 
-    return <div className={styles.annotation} style={customStyles}></div>
+    return (
+        <div
+            className={styles.annotation}
+            style={customStyles}
+            onClick={() => onSelect(speaker)}>
+            { selected && <Resizer  {...box} /> }
+        </div>
+    );
 };
 
-
-const isDraggingBox = function(dragging, box, mousePosition) {
-    return dragging && insideBox(box, mousePosition.end);
-}
 
 const translateBox = function(box, mousePosition) {
     let newBox = {...box};
@@ -48,75 +57,6 @@ const translateBox = function(box, mousePosition) {
     newBox.start = add(movement, { ...box.start });
     newBox.end = add(movement, box.end);
     return newBox;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const Annotation2 = function({ start, end, speaker, canvas, onChange }) {
-    let customStyles = calcBoxStyles(start, end, speaker.color);
-    const { mousePosition, dragging } = useMouseDrag(canvas);
-    // const draggingBox = dragging && insideBox({start, end}, mousePosition.end)
-
-    let draggingBox = false;
-
-    if (dragging) {
-        if (insideBox({start, end}, mousePosition.end)) {
-            draggingBox = true;
-        }
-
-        const change = diff(mousePosition.end, mousePosition.start);
-        const foo = {
-            ...customStyles,
-            x: customStyles.left + change.x,
-            y: customStyles.top + change.y
-        }
-        if (insideBox2(foo, mousePosition.end)) {
-            draggingBox = true;
-        }
-    }
-
-    useEffect(() => {
-        if (draggingBox) {
-            // Started drag
-        } else {
-            // Finished drag
-            const change = diff(mousePosition.end, mousePosition.start);
-            const foo = { ...customStyles,
-                left: customStyles.left + change.x,
-                top: customStyles.top + change.y
-            };
-
-            onChange({
-                start: { x: foo.left, y: foo.top },
-                end: { x: foo.left + foo.width, y: foo.top + customStyles.height },
-                speaker
-            })
-        }
-    }, [draggingBox]);
-
-    if (draggingBox) {
-        const change = diff(mousePosition.end, mousePosition.start);
-        customStyles.left += change.x;
-        customStyles.top += change.y;
-        return <div className={styles.annotation} style={customStyles}>Moving</div>
-    } else {
-        return <div className={styles.annotation} style={customStyles}></div>
-    }
-
 }
 
 export default Annotation

@@ -18,7 +18,8 @@ const defaultPeople = [
     { id: 'Person 4', color: '#ae9218', image: 'src/assets/images/person.jpg' }
 ];
 
-const defaultPerson = defaultPeople[2];
+// const defaultPerson = defaultPeople[0];
+const defaultPerson = null;
 
 
 const ProjectEditor = function({ project }) {
@@ -39,6 +40,7 @@ const ProjectEditor = function({ project }) {
                     video={project.videos[0]}
                     annotations={annotations}
                     speaker={selectedPerson}
+                    onSelect={setSelectedPerson}
                 />
             </div>
             <div className={classNames(styles.speakers, styles.box)}>

@@ -14,9 +14,10 @@ const canvasRef = React.createRef();
  * video: Path to the video we are editing
  * current: Position in the video
  * annotations in the video
- * speaker: person we are currently annotating
+ * speaker: person we are currently annotating (may be null)
+ * onSelect: event fired when user selects an annotation
  */
-const VideoAnnotator = function({ video, current, labels, speaker }) {
+const VideoAnnotator = function({ video, current, labels, speaker, onSelect }) {
     const {
         items: annotations,
         addItem: addAnnotation,
@@ -33,9 +34,12 @@ const VideoAnnotator = function({ video, current, labels, speaker }) {
 
     useEffect(function() {
         // Check if it is actually a drag opposed to a click
-        if (!isEqualObjects(mousePosition.start, mousePosition.end)) {
+        if (!isEqualObjects(mousePosition.start, mousePosition.end) && !dragging) {
             // Finished dragging
-            addAnnotation({ ...normalise(mousePosition), speaker })
+            if (speaker) {
+                console.log(annotations.findIndex((e) => e.speaker.color === speaker.color))
+                addAnnotation({ ...normalise(mousePosition), speaker });
+            }
         }
     }, [ dragging ]);
 
@@ -45,11 +49,13 @@ const VideoAnnotator = function({ video, current, labels, speaker }) {
 
     return (
         <div ref={canvasRef} className={styles.drawer}>
-            { dragging && <DragGuide { ...mousePosition } color={speaker.color} /> }
+            { speaker && dragging && <DragGuide { ...mousePosition } color={speaker.color} /> }
             { annotations.map((annotation, id) => 
                 <Annotation
                     key={id} {...annotation}
                     canvas={canvasRef.current}
+                    selectedSpeaker={speaker}
+                    onSelect={onSelect}
                     onChange={change => handleAnnotationChange(id, change)}
                 />
             ) }
