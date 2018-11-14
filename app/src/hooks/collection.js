@@ -11,9 +11,17 @@ export const useCollection = function(defaultItems=[]) {
         // TODO: implement
     }
 
+    function updateItem(index, updated) {
+        const newItems = Object.assign([], items, {
+            [index]: { ...items[index], ...updated }
+        });
+        setItems(newItems);
+    }
+
     return {
         addItem,
         removeItem,
+        updateItem,
         items
     }
 };

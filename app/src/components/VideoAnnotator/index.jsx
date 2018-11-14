@@ -6,7 +6,7 @@ import { useCollection } from '../../hooks/collection';
 import { isEqualObjects } from '../../utils';
 
 import { Annotation, DragGuide } from '../../components/Annotation';
-import { insideBox } from '../../components/Annotation/helpers';
+import { insideBox, normalise } from '../../components/Annotation/helpers';
 
 const canvasRef = React.createRef();
 
@@ -17,7 +17,11 @@ const canvasRef = React.createRef();
  * speaker: person we are currently annotating
  */
 const VideoAnnotator = function({ video, current, labels, speaker }) {
-    const { items: annotations, addItem: addAnnotation } = useCollection([]);
+    const {
+        items: annotations,
+        addItem: addAnnotation,
+        updateItem: updateAnnotation
+     } = useCollection([]);
     
     const { mousePosition, dragging } = useMouseDrag(canvasRef.current, [
         // Constraints
@@ -31,15 +35,23 @@ const VideoAnnotator = function({ video, current, labels, speaker }) {
         // Check if it is actually a drag opposed to a click
         if (!isEqualObjects(mousePosition.start, mousePosition.end)) {
             // Finished dragging
-            addAnnotation({ ...mousePosition, speaker })
+            addAnnotation({ ...normalise(mousePosition), speaker })
         }
     }, [ dragging ]);
+
+    const handleAnnotationChange = function(index, updated) {
+        updateAnnotation(index, updated);
+    }
 
     return (
         <div ref={canvasRef} className={styles.drawer}>
             { dragging && <DragGuide { ...mousePosition } color={speaker.color} /> }
             { annotations.map((annotation, id) => 
-                <Annotation key={id} {...annotation} canvas={canvasRef.current} />
+                <Annotation
+                    key={id} {...annotation}
+                    canvas={canvasRef.current}
+                    onChange={change => handleAnnotationChange(id, change)}
+                />
             ) }
             <video src={video}/>
         </div>

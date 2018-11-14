@@ -9,7 +9,7 @@
     --gray: #d3dce6;
 }
 
-video {
+* {
     user-drag: none; 
     user-select: none;
     -moz-user-select: none;

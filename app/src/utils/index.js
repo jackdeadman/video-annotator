@@ -28,4 +28,11 @@ export const flip = function(fn) {
         args.reverse();
         return fn(...args)
     }
-}
+};
+
+export const diff = function(left, right) {
+    return {
+        x: left.x - right.x,
+        y: left.y - right.y
+    }
+};
