@@ -8,11 +8,11 @@ export const calcBoxStyles = function({ start, end }, color) {
     }
 }
 
-export const insideBox = function (box, position) {
+export const insideBox = function (box, position, buffer=10) {
     const { left: x, top: y, width, height } = calcBoxStyles(box);
 
-    return x <= position.x && position.x <= x + width &&
-               y <= position.y && position.y <= y + height;
+    return (x - buffer) <= position.x && position.x <= (x + buffer) + width &&
+               (y - buffer) <= position.y && position.y <= (y + buffer) + height;
 }
 
 // Make start always be the top left point
