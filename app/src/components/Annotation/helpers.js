@@ -1,4 +1,4 @@
-export const calcBoxStyles = function(start, end, color) {
+export const calcBoxStyles = function({ start, end }, color) {
     return {
         width: Math.abs(start.x - end.x),
         height: Math.abs(start.y - end.y),
@@ -9,13 +9,8 @@ export const calcBoxStyles = function(start, end, color) {
 }
 
 export const insideBox = function (box, position) {
-    const { left: x, top: y, width, height } = calcBoxStyles(box.start, box.end);
+    const { left: x, top: y, width, height } = calcBoxStyles(box);
 
-    return x <= position.x && position.x <= x + width &&
-               y <= position.y && position.y <= y + height;
-}
-
-export const insideBox2 = function ({x, y, width, height}, position) {
     return x <= position.x && position.x <= x + width &&
                y <= position.y && position.y <= y + height;
 }
