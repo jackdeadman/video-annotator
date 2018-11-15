@@ -12,7 +12,7 @@ const Annotation = function({ index, start, end, speaker, canvas, onChange, sele
 
     // State
     const { mousePosition, dragging } = useMouseDrag(canvas);
-    const isDraggingBox = selected && dragging && insideBox(box, mousePosition.end, 10);
+    const isDraggingBox = selected && dragging && insideBox(box, mousePosition.end, -20);
     const [ draggingThisBox, setDraggingThisBox ] = useState(isDraggingBox);
 
 
@@ -38,7 +38,8 @@ const Annotation = function({ index, start, end, speaker, canvas, onChange, sele
     }
 
     const handleResize = function(corner, mousePosition) {
-        resizeBox(box, mousePosition, corner);
+        const newBox = resizeBox(box, mousePosition, corner);
+        onChange({ ...newBox, speaker });
     }
 
     return (
@@ -69,7 +70,7 @@ const CORNERS = {
 const resizeBox = function(box, mousePosition, corner) {
     let newBox = {...box};
     const movement = diff(mousePosition.end, mousePosition.start);
-
+    console.log(box, mousePosition, corner)
     switch (corner) {
         case CORNERS.TOP_LEFT:
             newBox.start = add(movement, { ...box.start });

@@ -2,19 +2,21 @@ import React, { useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import styles from './styles.css';
 import { useMouseDrag } from '../../hooks/mouse';
+import { isEqualObjects } from '../../utils';
 
 const Handle = function({index, onResize}) {
     const handle = useRef();
     const { mousePosition, dragging } = useMouseDrag(handle.current);
 
-    console.log(mousePosition)
-
     useEffect(() => {
-        if (!dragging) {
-
+        console.log(mousePosition.start, mousePosition.end)
+        console.log(!isEqualObjects(mousePosition.start, mousePosition.end), !dragging)
+        if (!isEqualObjects(mousePosition.start, mousePosition.end) && !dragging) {
+            console.log('Resize')
+            onResize(index, mousePosition);
             // onResize(index, mousePosition);
         }
-    }, dragging);
+    }, [ dragging ]);
 
     return (
         <div ref={handle}

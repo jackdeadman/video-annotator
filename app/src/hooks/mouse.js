@@ -44,7 +44,6 @@ export function useMouseDrag(element, contraints=[]) {
     }
 
     function handleMouseUp(e) {
-        console.log(element)
         setDragging(false);
     }
 
