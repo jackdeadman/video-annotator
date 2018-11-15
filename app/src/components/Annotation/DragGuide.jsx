@@ -1,10 +1,11 @@
 import React from 'react';
 
 import styles from './styles.css';
-import { calcBoxStyles } from './helpers';
+import { calcBoxStyles, clamp } from './helpers';
 
-const DragGuide = function({ start, end, color }) {
-    const customStyle = calcBoxStyles({ start, end }, color);
+const DragGuide = function({ start, end, color, canvas }) {
+    const customStyle = clamp(calcBoxStyles({ start, end }, color), canvas);
+
 
     return (
         <div className={styles.guide} style={customStyle}>

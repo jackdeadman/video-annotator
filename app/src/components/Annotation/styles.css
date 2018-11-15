@@ -22,6 +22,7 @@
 
 :root {
     --handle-size: 16px;
+    --handle-size: 32px;
 }
 
 .handle {
@@ -31,6 +32,7 @@
         #cccccc,
         #7e756f);
     position: absolute;
+    opacity: 1;
     height: var(--handle-size);
     width: var(--handle-size);
     border-radius: 50%;

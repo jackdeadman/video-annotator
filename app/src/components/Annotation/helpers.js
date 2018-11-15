@@ -30,3 +30,7 @@ export const normalise = function({ start, end }) {
 
     return { start: topLeft, end: bottomRight };
 };
+
+export const clamp = function(box, boundary) {
+    return box;
+}

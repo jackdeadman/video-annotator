@@ -37,13 +37,14 @@ export function useMouseDrag(element, contraints=[]) {
     let valid = true;
 
     function handleMouseDown(e) {
-        setStartPosition(mousePosition)
-        valid = contraints.every(fn => fn(mousePosition))
+        setStartPosition(mousePosition);
+        valid = contraints.every(fn => fn(mousePosition));
         // Only set dragging to true if it meets the constraints
-        setDragging(valid)
+        setDragging(valid);
     }
 
     function handleMouseUp(e) {
+        console.log(element)
         setDragging(false);
     }
 

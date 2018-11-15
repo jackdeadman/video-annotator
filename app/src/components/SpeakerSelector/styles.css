@@ -1,4 +1,4 @@
-.person {
+.speaker {
     display: grid;
     grid-template-columns: 100px auto;
     grid-template-rows: auto;
@@ -12,23 +12,23 @@
     cursor: pointer;
 }
 
-.person.selected {
+.speaker.selected {
     border-left: 40px solid var(--primary-color);
     opacity: 1;
     background-color: #F9F8F7;
 }
 
-.person > img {
+.speaker > img {
     align-self: start;
     width: 100%;
 }
 
-.person > div {
+.speaker > div {
     vertical-align: middle;
     height: 100%;
 }
 
-.person h2 {
+.speaker h2 {
     font-weight: 500;
     margin: 0 0 0.5rem 0;
     font-size: 1em;

@@ -1,4 +1,5 @@
 import Annotation from './Annotation';
 import DragGuide from './DragGuide';
+import KeyBindings from './KeyBindings';
 
-export { Annotation, DragGuide };
+export { Annotation, DragGuide, KeyBindings };
