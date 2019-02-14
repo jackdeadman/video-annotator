@@ -1,0 +1,58 @@
+.input {
+    display: inline-block;
+}
+
+.main {
+    text-align: left;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.input + .input {
+    padding-left: 20px;
+}
+
+.input label {
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.input input {
+    display: inline-block;
+    width: 50px;
+    padding: 10px;
+    font: inherit;
+}
+
+.form {
+    display: block;
+}
+
+.grid {
+    max-height: 200px;
+    overflow-y: scroll;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #fffefece;
+    border: 1px solid #ccc;
+}
+
+.framePreview {
+    overflow: hidden;
+    height: 50px;
+    width: 100px;
+    margin: 5px;
+    text-align: center;
+}
+
+.framePreview img {
+    height: 100%;
+    width: auto;
+}
+
+.loading {
+    opacity: 0.2;
+    pointer-events: none;
+}

@@ -8,8 +8,22 @@
         "videos": "videos"
     },
 
-    "scenes": [
-        "S20"
-    ]
+    "scenes": {
+        "S20": {
+            "frames": 15,
+            "spacing": 5,
+            "cameras": {
+                "U01": {
+            
+                },
+                "U02": {
+            
+                },
+                "U03": {
+            
+                }
+            }
+        }
+    }
 
 }

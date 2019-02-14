@@ -43,3 +43,19 @@ export const add = function(left, right) {
         y: left.y + right.y
     }
 };
+
+export const times = function(amount, fn) {
+    Array.from(Array(times)).forEach((_, i) => fn(i));
+}
+
+export const linspace = function(start, end, size) {
+    const array = [];
+    const step = (end - start) / (size - 1);
+
+    times(size, i => array.push(start + (step * i)));
+    return array;
+}
+
+export const object2array = function(obj) {
+    return Object.entries(obj).map(([ key, value ]) => ({ key, value }) );
+};

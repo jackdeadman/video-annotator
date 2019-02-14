@@ -5,7 +5,7 @@
   "main": "main_process.js",
   "scripts": {
     "bundle": "webpack --mode development",
-    "serve": "electron .",
+    "serve": "electron . --allow-file-access-from-files",
     "start": "npm-run-all --parallel bundle serve"
   },
   "author": "J. Renato Ramos González <renato.etc.etc.etc@gmail.com>",
@@ -27,6 +27,10 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "electron-fetch": "^1.3.0",
+    "electron-main-fetch": "^0.1.0",
+    "ffmpeg": "0.0.4",
+    "promisify": "0.0.3",
     "react": "^16.7.0-alpha",
     "react-dom": "^16.7.0-alpha",
     "video-react": "^0.13.1"

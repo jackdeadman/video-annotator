@@ -4,6 +4,7 @@
 *.mp4
 *.avi
 *.mp3
+*.jpg
 
 # Logs
 logs

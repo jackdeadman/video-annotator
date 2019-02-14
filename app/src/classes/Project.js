@@ -1,4 +1,5 @@
 import path from 'path'
+import { object2array } from '../utils';
 
 class Project {
 
@@ -23,9 +24,20 @@ class Project {
         return path.join(this.videoPath, ...paths);
     }
 
+    get scenes() {
+        return Object.keys(this.projectJSON.scenes);
+    }
 
     get videos() {
-        return this.projectJSON.scenes.map(id => `${this.joinVideoPath(id)}.mp4`);
+        return this.scenes.map(id => `${this.joinVideoPath(id)}.mp4`);
+    }
+
+    cameras(scene) {
+        return this.projectJSON.scenes[scene].cameras;
+    }
+
+    camerasArray(scene) {
+        return object2array(this.cameras(scene))
     }
 
 }
