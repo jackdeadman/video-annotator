@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useReducer } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import styles from './styles.css';
 
 import { useMouseDrag } from '../../hooks/mouse';
@@ -9,6 +9,8 @@ import {
     MOVE_ANNOTATION_TO_FRONT,
     SET_SELECTED_SPEAKER
 } from '../../constants/actionTypes';
+
+import { ProjectContext } from '../../constants/contexts';
 
 import { Annotation, DragGuide, KeyBindings } from '../../components/Annotation';
 import { normalise } from '../../components/Annotation/helpers';
@@ -22,7 +24,10 @@ import { normalise } from '../../components/Annotation/helpers';
  */
 const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
     const { state, dispatch } = store;
-    const { annotations, selectedSpeaker } = state;
+    const {
+        annotations, selectedSpeaker, selectedFrame,
+        selectedCamera, selectedScene
+    } = state;
 
     const canvasRef = useRef();
     const { mousePosition, dragging } = useMouseDrag(canvasRef.current, [
@@ -64,7 +69,9 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
             type: SET_SELECTED_SPEAKER,
             value: annotation.speaker
         });
-    }
+    };
+
+    const project = useContext(ProjectContext);
 
     return (
         <KeyBindings state={state} dispatch={dispatch}>
@@ -80,7 +87,8 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
                         onChange={change => updateAnnotation(id, change)}
                     />
                 ) }
-                <video src={video}/>
+                <img className={styles.frame} 
+                    src={project.frame(selectedScene, selectedCamera.key, selectedFrame)} />
             </div>
         </KeyBindings>
     );

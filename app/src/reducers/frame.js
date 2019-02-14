@@ -1,9 +1,11 @@
 import annotation from './annotation';
 import speaker from './speaker';
+import project from './project';
 
 export default (state, action) => {
+    console.log(state, action)
     const responses = Object.assign(...[
-        annotation, speaker
+        annotation, speaker, project
     ]);
 
     if (typeof responses[action.type] === 'function') {

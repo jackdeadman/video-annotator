@@ -5,7 +5,8 @@
 
     "folders": {
         "labels": "labels",
-        "videos": "videos"
+        "videos": "videos",
+        "frames": "frames"
     },
 
     "scenes": {

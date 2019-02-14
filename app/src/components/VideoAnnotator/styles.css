@@ -6,3 +6,9 @@
     cursor: crosshair;
     position: relative;
 }
+
+.frame {
+    width: 100%;
+    height: auto;
+    display: block;
+}

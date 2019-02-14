@@ -1,7 +1,8 @@
-import React, { useState, useEffect }  from 'react'
+import React, { useState, useEffect, useContext }  from 'react'
 import styles from './styles.css'
 import { extractFrames } from '../../modules/frames'
 import classNames from 'classnames'
+import { ProjectContext } from '../../constants/contexts';
 
 const ParameterChanger = ({ frames, spacing, onChange }) => {
     // '+' used to convert '' to 0
@@ -56,7 +57,7 @@ const FrameGrid = ({ frames, onSelect }) => {
     );
 };
 
-const FramePicker = function ({ video, onChange }) {
+const FramePicker = function ({ video, onChange, }) {
 
     const [ params, setParams ] = useState({
         frames: 15,
@@ -72,9 +73,11 @@ const FramePicker = function ({ video, onChange }) {
         }
     }
 
+    const project = useContext(ProjectContext);
+
     useEffect(async () => {
         setImages(LOADING)
-        setImages(await extractFrames(video, params.frames));
+        setImages(await extractFrames(video, params.frames, project.framePath));
     }, [ params ]);
 
 

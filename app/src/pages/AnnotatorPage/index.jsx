@@ -17,7 +17,6 @@ const AnnotatorPage = function({ projectFilePath }) {
         }
     }, [ project ]);
 
-
     return (
         project == null
             ? <Loader>Loading Project</Loader>
