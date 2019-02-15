@@ -1,0 +1,26 @@
+diff --git a/node_modules/ffmpeg/lib/utils.js b/node_modules/ffmpeg/lib/utils.js
+index e33a262..2dd5902 100644
+--- a/node_modules/ffmpeg/lib/utils.js
++++ b/node_modules/ffmpeg/lib/utils.js
+@@ -86,7 +86,7 @@ module.exports.mkdir = function (dirpath, mode, callback, position) {
+ 		parts = parts.slice(1);
+ 	
+ 	// Set the initial configuration
+-    mode = mode || 0777;
++    mode = mode || 0o777;
+     position = position || 0;
+ 	
+ 	// Check se current position is greater than the list of folders
+diff --git a/node_modules/ffmpeg/lib/video.js b/node_modules/ffmpeg/lib/video.js
+index 44b1c96..407c948 100644
+--- a/node_modules/ffmpeg/lib/video.js
++++ b/node_modules/ffmpeg/lib/video.js
+@@ -765,7 +765,7 @@ module.exports = function (filePath, settings, infoConfiguration, infoFile) {
+ 		settings.file_name = path.basename(settings.file_name, path.extname(settings.file_name)) + '_%d.jpg';
+ 		
+ 		// Create the directory to save the extracted frames
+-		utils.mkdir(destinationFolder, 0777);
++		utils.mkdir(destinationFolder, 0o777);
+ 		
+ 		resetCommands(this);
+ 		

@@ -88,7 +88,7 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
                     />
                 ) }
                 <img className={styles.frame} 
-                    src={project.frame(selectedScene, selectedCamera.key, selectedFrame)} />
+                    src={`/home/jack/Documents/phd/video-annotator/${project.frame(selectedScene, selectedCamera.key, selectedFrame)}`} />
             </div>
         </KeyBindings>
     );

@@ -50,12 +50,17 @@ const FrameGrid = ({ frames, onSelect }) => {
             { frames.map((frame, index) => (
                 <div onClick={onSelect.bind(this, index)} key={index}
                         className={styles.framePreview}>
-                    <PreviewImage src={frame} />
+                    <PreviewImage src={`/home/jack/Documents/phd/video-annotator/${frame}`} />
                 </div>
             )) }
         </div>
     );
 };
+
+async function loadImages(video, frames, framePath, setImages) {
+    setImages(LOADING)
+    setImages(await extractFrames(video, frames, framePath));
+}
 
 const FramePicker = function ({ video, onChange, }) {
 
@@ -75,9 +80,8 @@ const FramePicker = function ({ video, onChange, }) {
 
     const project = useContext(ProjectContext);
 
-    useEffect(async () => {
-        setImages(LOADING)
-        setImages(await extractFrames(video, params.frames, project.framePath));
+    useEffect(() => {
+        loadImages(video, params.frames, project.framePath, setImages);
     }, [ params ]);
 
 

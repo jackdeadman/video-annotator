@@ -3,7 +3,7 @@ import { Player } from 'video-react';
 import AnnotatorPage from './pages/AnnotatorPage';
 
 const VIDEO_URL = `src/assets/video/S20_U01_boxes.mp4`;
-const projectFilePath = '/home/jack/Documents/tools/video-annotator/example-project/project.json';
+const projectFilePath = 'example-project/project.json';
 
 export default class App extends Component {
     render() {

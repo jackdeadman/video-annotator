@@ -6,7 +6,10 @@
   "scripts": {
     "bundle": "webpack --mode development",
     "serve": "electron . --allow-file-access-from-files",
-    "start": "npm-run-all --parallel bundle serve"
+    "start": "npm-run-all --parallel bundle serve",
+    "scripts": {
+      "postinstall": "patch-package"
+    }
   },
   "author": "J. Renato Ramos González <renato.etc.etc.etc@gmail.com>",
   "repository": "pastahito/electron-react-webpack",

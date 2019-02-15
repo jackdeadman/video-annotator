@@ -24,7 +24,7 @@ const parseVideoPath = function(videoPath) {
 };
 
 export async function extractFrames(videoPath, amount, outputDir) {
-
+    console.log(videoPath, amount, outputDir)
     const ext = '.jpg';
 
     // Want to change the behaviour such that no frames are

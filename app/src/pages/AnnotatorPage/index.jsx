@@ -5,16 +5,20 @@ import ProjectEditor from '../../components/ProjectEditor';
 import Project from '../../classes/Project';
 import Loader from '../../components/Loader';
 
+async function loadProject(project, projectFilePath, setProject) {
+    if (project == null) {
+        const file = await readFile(projectFilePath);
+        const project = new Project(projectFilePath, JSON.parse(file))
+        setProject(project);
+    }
+}
+
 const AnnotatorPage = function({ projectFilePath }) {
 
     const [ project, setProject ] = useState(null);
 
-    useEffect(async function() {
-        if (project == null) {
-            const file = await readFile(projectFilePath);
-            const project = new Project(projectFilePath, JSON.parse(file))
-            setProject(project);
-        }
+    useEffect(function() {
+        loadProject(project, projectFilePath, setProject);
     }, [ project ]);
 
     return (
