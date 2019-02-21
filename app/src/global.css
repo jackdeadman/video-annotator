@@ -39,6 +39,10 @@
     
 }
 
+:global .btn {
+    padding: 10px 20px;
+}
+
 h1 {
     color: var(--black)
 }

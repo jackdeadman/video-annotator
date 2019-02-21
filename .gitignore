@@ -1,6 +1,7 @@
 #
 *-lock.json
-
+.vscode
+env
 *.mp4
 *.avi
 *.mp3

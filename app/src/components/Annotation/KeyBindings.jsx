@@ -7,15 +7,15 @@ import { useKeyboard } from '../../hooks/keyboard';
 const KeyBindings = ({ children, state, dispatch }) => {
     const keyPressed = useKeyboard();
     const { annotations, speaker } = state;
+    const selectedAnnotations = annotations[state.selectedFrame];
 
     useEffect(function() {
-        console.log(keyPressed)
         switch (keyPressed) {
             // Delete annotation on delete keypress
             case DELETE:
                 dispatch({
                     type: REMOVE_ANNOTATION,
-                    value: annotations.findIndex(ann => ann.speaker === speaker)
+                    value: selectedAnnotations.findIndex(ann => ann.speaker === speaker)
                 })
                 break;
             // Blur

@@ -8,7 +8,7 @@ import Resizer from './Resizer';
 
 const Annotation = function({ index, start, end, speaker, canvas, onChange, selectedSpeaker, onSelect }) {
     const box = { start, end };
-    const selected = speaker.color === (selectedSpeaker || {}).color;
+    const selected = speaker.id === (selectedSpeaker || {}).id;
 
     // State
     const { mousePosition, dragging } = useMouseDrag(canvas);
@@ -70,7 +70,7 @@ const CORNERS = {
 const resizeBox = function(box, mousePosition, corner) {
     let newBox = {...box};
     const movement = diff(mousePosition.end, mousePosition.start);
-    console.log(box, mousePosition, corner)
+
     switch (corner) {
         case CORNERS.TOP_LEFT:
             newBox.start = add(movement, { ...box.start });

@@ -2,6 +2,7 @@ import fs from 'fs';
 import util from 'util';
 
 export const readFile = util.promisify(async (file, cb) => fs.readFile(file, 'utf-8', cb));
+export const writeFile = util.promisify(fs.writeFile);
 
 export const waitFor = util.promisify(async (time, cb) => setTimeout(cb, time));
 export const isEqualObjects = function(obj1, obj2) {
@@ -45,7 +46,7 @@ export const add = function(left, right) {
 };
 
 export const times = function(amount, fn) {
-    Array.from(Array(times)).forEach((_, i) => fn(i));
+    Array.from(Array(amount)).forEach((_, i) => fn(i));
 }
 
 export const linspace = function(start, end, size) {
@@ -59,3 +60,8 @@ export const linspace = function(start, end, size) {
 export const object2array = function(obj) {
     return Object.entries(obj).map(([ key, value ]) => ({ key, value }) );
 };
+
+export const identity = x => x;
+export const always = value => () => value;
+export const alwaysTrue = always(true);
+export const alwaysFalse = always(false);

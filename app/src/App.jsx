@@ -1,23 +1,23 @@
-import React, {Component} from 'react'
-import { Player } from 'video-react';
+import React, { useState } from 'react'
+
 import AnnotatorPage from './pages/AnnotatorPage';
+import SelectProjectPage from './pages/SelectProjectPage';
 
-const VIDEO_URL = `src/assets/video/S20_U01_boxes.mp4`;
-const projectFilePath = 'example-project/project.json';
 
-export default class App extends Component {
-    render() {
+const App = function() {
 
-        return (
-            <div>
-                <div className="hello">
-                    <h1>Video Annotator</h1>
-                    <AnnotatorPage projectFilePath={projectFilePath}/>
-                    {/* <Player
-                        src={VIDEO_URL}
-                    /> */}
-                </div>
-            </div>
-        )
-    }
-}
+    // const [ projectBase, setProjectBase ] = useState(null);
+    const [ projectBase, setProjectBase ] = useState('/home/jack/Documents/tools/example-project');
+
+    return (
+        <div>
+            <h1>Video Annotator</h1>
+            { projectBase == null
+                ? <SelectProjectPage onSelect={setProjectBase} />
+                : <AnnotatorPage projectBase={projectBase} />
+            }
+        </div>
+    )
+};
+
+export default App;

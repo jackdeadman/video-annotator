@@ -48,7 +48,7 @@ export function useMouseDrag(element, contraints=[]) {
     }
 
     useEffect(() => {
-        if (!element) return null;
+        if (!element) return;
         element.addEventListener('mousedown', handleMouseDown);
         element.addEventListener('mouseup', handleMouseUp);
         return () => {

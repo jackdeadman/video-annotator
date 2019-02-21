@@ -12,3 +12,9 @@
     height: auto;
     display: block;
 }
+
+.save {
+    position: absolute;
+    right: 0;
+    padding: 10px 20px;
+}

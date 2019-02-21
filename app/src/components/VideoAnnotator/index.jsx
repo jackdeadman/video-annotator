@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import styles from './styles.css';
 
 import { useMouseDrag } from '../../hooks/mouse';
@@ -9,6 +9,10 @@ import {
     MOVE_ANNOTATION_TO_FRONT,
     SET_SELECTED_SPEAKER
 } from '../../constants/actionTypes';
+
+import {
+    SAVING, NEEDS_SAVING, SAVED
+} from '../../constants/symbols';
 
 import { ProjectContext } from '../../constants/contexts';
 
@@ -29,11 +33,17 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
         selectedCamera, selectedScene
     } = state;
 
+    const selectedAnnotations = annotations[selectedFrame] || [];
+
     const canvasRef = useRef();
+    const { project } = useContext(ProjectContext);
+
+    const [ edits, setEdits ] = useState(SAVED);
+
     const { mousePosition, dragging } = useMouseDrag(canvasRef.current, [
         // Constraints
         // - Can't annotate a person twice
-        _ => !annotations.some(ann => ann.speaker === selectedSpeaker)
+        _ => !selectedAnnotations.some(ann => ann.speaker.id === selectedSpeaker.id)
     ]);
 
     // Setup Effects
@@ -47,6 +57,7 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
                     type: ADD_ANNOTATION,
                     value: { ...normalise(mousePosition), speaker: selectedSpeaker }
                 });
+                setEdits(NEEDS_SAVING);
             }
         }
     }, [ dragging ]);
@@ -56,6 +67,7 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
             type: UPDATE_ANNOTATION,
             value: { index, updated }
         });
+        setEdits(NEEDS_SAVING);
     }
 
     const handleSelect = function(selected) {
@@ -64,20 +76,35 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
             value: selected
         })
 
-        const annotation = annotations[selected];
+        const annotation = selectedAnnotations[selected];
         dispatch({
             type: SET_SELECTED_SPEAKER,
             value: annotation.speaker
         });
     };
 
-    const project = useContext(ProjectContext);
+    const saveAnnotations = async function() {
+        dispatch({
+            type: SET_SELECTED_SPEAKER,
+            value: null
+        });
+        setEdits(SAVING)
+        await project.saveAnnotations();
+        setEdits(SAVED);
+    }
 
     return (
         <KeyBindings state={state} dispatch={dispatch}>
             <div ref={canvasRef} className={styles.drawer}>
-                { selectedSpeaker && dragging && <DragGuide { ...mousePosition } color={selectedSpeaker.color} /> }
-                { annotations.map((annotation, id) => 
+                { (edits != SAVED) &&
+                    <button onClick={saveAnnotations} className={styles.save}>
+                        { (edits == NEEDS_SAVING) && 'Save Annotations' }
+                        { (edits == SAVING) && 'Saving...' }
+                    </button>
+                }
+                { selectedSpeaker && dragging &&
+                    <DragGuide { ...mousePosition } color={selectedSpeaker.color} /> }
+                { selectedAnnotations.map((annotation, id) => 
                     <Annotation
                         key={id} {...annotation}
                         index={id}
@@ -88,7 +115,7 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
                     />
                 ) }
                 <img className={styles.frame} 
-                    src={`/home/jack/Documents/phd/video-annotator/${project.frame(selectedScene, selectedCamera.key, selectedFrame)}`} />
+                    src={project.frame(selectedScene, selectedCamera.key, selectedFrame)} />
             </div>
         </KeyBindings>
     );

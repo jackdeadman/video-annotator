@@ -9,10 +9,7 @@ const Handle = function({index, onResize}) {
     const { mousePosition, dragging } = useMouseDrag(handle.current);
 
     useEffect(() => {
-        console.log(mousePosition.start, mousePosition.end)
-        console.log(!isEqualObjects(mousePosition.start, mousePosition.end), !dragging)
         if (!isEqualObjects(mousePosition.start, mousePosition.end) && !dragging) {
-            console.log('Resize')
             onResize(index, mousePosition);
             // onResize(index, mousePosition);
         }

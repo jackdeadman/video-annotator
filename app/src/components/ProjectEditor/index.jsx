@@ -9,8 +9,8 @@ import VideoAnnotator from '../VideoAnnotator';
 import SpeakerSelector from '../SpeakerSelector';
 import FramePicker from '../FramePicker';
 
-import { ProjectContext } from '../../constants/contexts';
-import { SET_SELECTED_CAMERA } from '../../constants/actionTypes';
+import { ProjectContext, EditorContext } from '../../constants/contexts';
+import { SET_SELECTED_CAMERA, SET_SELECTED_FRAME } from '../../constants/actionTypes';
 
 const defaultSpeakers = [
     { id: 'Person 1', color: '#2c25d6', image: 'src/assets/images/person.jpg' },
@@ -32,15 +32,16 @@ const CameraSelector = function({ cameras, selected, onChange }) {
     );
 }
 
-const ProjectEditor = function({ project }) {
+const ProjectEditor = function({ project, onProjectUpdate }) {
     // Setup Project State
     const [ state, dispatch ] = useReducer(reducer, {
-        annotations: [],
+        annotations: project.annotations.markers,
         selectedSpeaker: null,
         speakers: defaultSpeakers,
         selectedScene: project.scenes[0],
         selectedCamera: project.camerasArray(project.scenes[0])[0],
-        selectedFrame: 1
+        selectedFrame: 1,
+        project
     });
 
     const store = { state, dispatch };
@@ -48,27 +49,36 @@ const ProjectEditor = function({ project }) {
     const { selectedScene, selectedCamera } = state;
     const video = project.video(selectedScene, selectedCamera.key);
 
+    function setActiveFrame(frameNum) {
+        dispatch({
+            type: SET_SELECTED_FRAME,
+            value: frameNum
+        });
+    }
+
     return (
-        <ProjectContext.Provider value={project}>
-            <div className={styles.page}>
-                <div className={classNames(styles.video, styles.box)}>
-                    <VideoAnnotator store={store} />
+        <ProjectContext.Provider value={{ project, setProject: onProjectUpdate }}>
+            <EditorContext.Provider value={store}>
+                <div className={styles.page}>
+                    <div className={classNames(styles.video, styles.box)}>
+                        <VideoAnnotator store={store} />
+                    </div>
+                    <div className={classNames(styles.speakers, styles.box)}>
+                        <SpeakerSelector store={store} />
+                    </div>
+                    <div className={classNames(styles.frames, styles.box)}>
+                        <CameraSelector
+                            cameras={project.camerasArray(selectedScene)}
+                            selected={selectedCamera}
+                            onChange={camera => dispatch({
+                                type: SET_SELECTED_CAMERA,
+                                value: camera
+                            })}
+                        />
+                        <FramePicker video={video} onChange={setActiveFrame} />
+                    </div>
                 </div>
-                <div className={classNames(styles.speakers, styles.box)}>
-                    <SpeakerSelector store={store} />
-                </div>
-                <div className={classNames(styles.frames, styles.box)}>
-                    <CameraSelector
-                        cameras={project.camerasArray(selectedScene)}
-                        selected={selectedCamera}
-                        onChange={camera => dispatch({
-                            type: SET_SELECTED_CAMERA,
-                            value: camera
-                        })}
-                    />
-                    <FramePicker video={video} onChange={console.log} />
-                </div>
-            </div>
+            </EditorContext.Provider>
         </ProjectContext.Provider>
     );
 };

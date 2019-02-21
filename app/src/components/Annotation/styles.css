@@ -22,7 +22,7 @@
 
 :root {
     --handle-size: 16px;
-    --handle-size: 32px;
+    /* --handle-size: 32px; */
 }
 
 .handle {

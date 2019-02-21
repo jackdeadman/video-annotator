@@ -1,89 +1,56 @@
 import React, { useState, useEffect, useContext }  from 'react'
-import styles from './styles.css'
-import { extractFrames } from '../../modules/frames'
 import classNames from 'classnames'
-import { ProjectContext } from '../../constants/contexts';
 
-const ParameterChanger = ({ frames, spacing, onChange }) => {
-    // '+' used to convert '' to 0
-    function changeFrames({ target }) {
-        onChange({ spacing, frames: +target.value });
+import styles from './styles.css'
+
+import { extractFrames, loadFrames } from '../../modules/frames'
+import { ProjectContext } from '../../constants/contexts'
+import { LOADING } from '../../constants/symbols'
+
+import ParameterChanger from './PrameterChanger'
+import FrameGrid from './FrameGrid'
+
+async function loadImages(video, framesCount, framesSpacing, framePath, setImages) {
+    setImages(LOADING);
+    const images = await loadFrames(video, framePath);
+
+    // Only extract the images if we don't have the expected amount
+    if (images.length === framesCount) {
+        setImages(images);
+    } else {
+        setImages(await extractFrames(video, framesCount, framesSpacing, framePath));
     }
-
-    function changeSpacing({ target }) {
-        onChange({ frames, spacing: +target.value });
-    }
-
-    return (
-        <form className={styles.form}>
-            <div className={styles.input}>
-                <label>Frames:</label>
-                <input type="number" value={frames} onChange={changeFrames}/>
-            </div>
-
-            <div className={styles.input}>
-                <label>Spacing:</label>
-                <input type="number" value={spacing} onChange={changeSpacing}/>
-            </div>
-        </form>
-    );
-};
-
-const PreviewImage = ({ src }) => {
-    return (<img src={src} alt="Picture of a frame" />);
-};
-
-const LOADING = Symbol.for('LOADING');
-
-const FrameGrid = ({ frames, onSelect }) => {
-
-    if (frames == LOADING) {
-        return <div>Loading...</div>
-    }
-
-    if (frames.length === 0) {
-        return <div>No frames</div>
-    }
-
-    return (
-        <div className={styles.grid}>
-            { frames.map((frame, index) => (
-                <div onClick={onSelect.bind(this, index)} key={index}
-                        className={styles.framePreview}>
-                    <PreviewImage src={`/home/jack/Documents/phd/video-annotator/${frame}`} />
-                </div>
-            )) }
-        </div>
-    );
-};
-
-async function loadImages(video, frames, framePath, setImages) {
-    setImages(LOADING)
-    setImages(await extractFrames(video, frames, framePath));
 }
 
 const FramePicker = function ({ video, onChange, }) {
 
-    const [ params, setParams ] = useState({
-        frames: 15,
-        spacing: 5
-    });
-
+    const { project } = useContext(ProjectContext);
     const [ images, setImages ] = useState(LOADING);
 
+    const [ params, setParams ] = useState({
+        frames: project.framesCount(video),
+        spacing: project.framesSpacing(video)
+    });
+
+    useEffect(() => {
+        // Save the changes to the file
+        project.saveFrameUpdate(video, params);
+    }, [ params ]);
+
     function updateParams(params) {
-        // Can only adjust params once the images have been loaded.
+        // Can only adjust params once the images have finished loading.
         if (images != LOADING) {
             setParams(params);
         }
     }
 
-    const project = useContext(ProjectContext);
+    const framesCount = params.frames;
+    const framesSpacing = params.spacing;
+    const framePath = project.framePathForVideo(video);
 
     useEffect(() => {
-        loadImages(video, params.frames, project.framePath, setImages);
-    }, [ params ]);
-
+        loadImages(video, framesCount, framesSpacing, framePath, setImages);
+    }, [params]);
 
     return (
         <div className={classNames(styles.main, {[styles.loading]: images == LOADING})}>
