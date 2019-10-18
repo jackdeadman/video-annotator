@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export function useMousePosition() {
     const [ mousePosition, setMousePosition ] = useState({ x:0, y: 0 });
@@ -32,15 +32,17 @@ export function useMousePositionRelative(element) {
 
 export function useMouseDrag(element, contraints=[]) {
     const mousePosition = useMousePositionRelative(element);
-    const [ startPosition, setStartPosition] = useState({...mousePosition});
+    const ref = useRef(mousePosition)
+
+    let [ startPosition, setStartPosition] = useState(null);
     const [ dragging, setDragging ] = useState(false);
     let valid = true;
 
-    function handleMouseDown(e) {
-        setStartPosition(mousePosition);
+    const handleMouseDown = (e) => {
         valid = contraints.every(fn => fn(mousePosition));
-        // Only set dragging to true if it meets the constraints
-        setDragging(valid);
+        if (valid) {
+            setStartPosition(ref.current);
+        }
     }
 
     function handleMouseUp(e) {
@@ -48,14 +50,22 @@ export function useMouseDrag(element, contraints=[]) {
     }
 
     useEffect(() => {
+        ref.current = mousePosition
+    }, [ mousePosition ]);
+
+    useEffect(() => {
+        setDragging(true);
+    }, [ startPosition ]);
+
+    useEffect(() => {
         if (!element) return;
         element.addEventListener('mousedown', handleMouseDown);
-        element.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('mouseup', handleMouseUp);
         return () => {
             element.removeEventListener('mousedown', handleMouseDown);
-            element.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('mouseup', handleMouseUp);
         };
-    });
+    }, [ element ]);
 
     return {
         mousePosition: {

@@ -1,0 +1,17 @@
+{
+    "project_name": "scene_21",
+    "created_at": "Wed Oct 16 2019 14:12:53 GMT+0100 (BST)",
+    "updated_at": "Wed Oct 16 2019 14:12:53 GMT+0100 (BST)",
+    "folders": {
+        "labels": "labels",
+        "frames": "frames"
+    },
+    "cameras": {
+        "S21_U01": "/run/user/1000/gvfs/sftp:host=sharc.sheffield.ac.uk,user=acp18jd/fastdata/acp18jd/experiment_dump/labels/frames/data/frames/S21_U01",
+        "S21_U02": "/run/user/1000/gvfs/sftp:host=sharc.sheffield.ac.uk,user=acp18jd/fastdata/acp18jd/experiment_dump/labels/frames/data/frames/S21_U02",
+        "S21_U03": "/run/user/1000/gvfs/sftp:host=sharc.sheffield.ac.uk,user=acp18jd/fastdata/acp18jd/experiment_dump/labels/frames/data/frames/S21_U03",
+        "S21_U04": "/run/user/1000/gvfs/sftp:host=sharc.sheffield.ac.uk,user=acp18jd/fastdata/acp18jd/experiment_dump/labels/frames/data/frames/S21_U04",
+        "S21_U05": "/run/user/1000/gvfs/sftp:host=sharc.sheffield.ac.uk,user=acp18jd/fastdata/acp18jd/experiment_dump/labels/frames/data/frames/S21_U05",
+        "S21_U06": "/run/user/1000/gvfs/sftp:host=sharc.sheffield.ac.uk,user=acp18jd/fastdata/acp18jd/experiment_dump/labels/frames/data/frames/S21_U06"
+    }
+}

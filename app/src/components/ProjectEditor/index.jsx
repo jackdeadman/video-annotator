@@ -20,13 +20,12 @@ const defaultSpeakers = [
 ];
 
 const CameraSelector = function({ cameras, selected, onChange }) {
-    console.log(cameras, selected)
     return (
         <ul className={styles.tab}>{ cameras.map(camera => 
-            <li className={classNames({ [styles.selected]: camera.key === selected.key })}
+            <li className={classNames({ [styles.selected]: camera === selected })}
                 onClick={onChange.bind(this, camera)}
-                key={camera.key}>
-                { camera.key }
+                key={camera}>
+                { camera }
             </li>
         ) }</ul>
     );
@@ -38,16 +37,14 @@ const ProjectEditor = function({ project, onProjectUpdate }) {
         annotations: project.annotations.markers,
         selectedSpeaker: null,
         speakers: defaultSpeakers,
-        selectedScene: project.scenes[0],
-        selectedCamera: project.camerasArray(project.scenes[0])[0],
-        selectedFrame: 1,
+        selectedCamera: project.cameras[0],
+        selectedFrame: 0,
         project
     });
 
     const store = { state, dispatch };
 
     const { selectedScene, selectedCamera } = state;
-    const video = project.video(selectedScene, selectedCamera.key);
 
     function setActiveFrame(frameNum) {
         dispatch({
@@ -68,14 +65,14 @@ const ProjectEditor = function({ project, onProjectUpdate }) {
                     </div>
                     <div className={classNames(styles.frames, styles.box)}>
                         <CameraSelector
-                            cameras={project.camerasArray(selectedScene)}
+                            cameras={project.cameras}
                             selected={selectedCamera}
                             onChange={camera => dispatch({
                                 type: SET_SELECTED_CAMERA,
                                 value: camera
                             })}
                         />
-                        <FramePicker video={video} onChange={setActiveFrame} />
+                        <FramePicker camera={selectedCamera} onChange={setActiveFrame} />
                     </div>
                 </div>
             </EditorContext.Provider>

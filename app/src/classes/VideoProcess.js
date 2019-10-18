@@ -9,7 +9,6 @@ class VideoProcess {
     generateFrames(amount, amount) {
         linspace(start, this.frames, amount).forEach(frame => {
             const rounded = Math.round(frame);
-            console.log(rounded)
         });
     }
 

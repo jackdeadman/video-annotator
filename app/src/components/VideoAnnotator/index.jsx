@@ -14,10 +14,13 @@ import {
     SAVING, NEEDS_SAVING, SAVED
 } from '../../constants/symbols';
 
-import { ProjectContext } from '../../constants/contexts';
+import { ProjectContext, CanvasContext } from '../../constants/contexts';
 
 import { Annotation, DragGuide, KeyBindings } from '../../components/Annotation';
 import { normalise } from '../../components/Annotation/helpers';
+import AdjustMode from './AdjustMode';
+import { useChange } from '../../hooks/';
+
 
 /**
  * video: Path to the video we are editing
@@ -26,24 +29,31 @@ import { normalise } from '../../components/Annotation/helpers';
  * speaker: person we are currently annotating (may be null)
  * onSelect: event fired when user selects an annotation
  */
-const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
+const VideoAnnotator = function({ store }) {
     const { state, dispatch } = store;
     const {
         annotations, selectedSpeaker, selectedFrame,
-        selectedCamera, selectedScene
+        selectedCamera
     } = state;
 
     const selectedAnnotations = annotations[selectedFrame] || [];
-
     const canvasRef = useRef();
-    const { project } = useContext(ProjectContext);
 
+    // These needs to be refs as they are used inside the closure.
+    const selectedSpeakerRef = useRef(selectedSpeaker);
+    const selectedAnnotationsRef = useRef(selectedAnnotations);
+
+    const { project } = useContext(ProjectContext);
     const [ edits, setEdits ] = useState(SAVED);
+    const [ adjusting, setAdjusting ] = useState(false);
 
     const { mousePosition, dragging } = useMouseDrag(canvasRef.current, [
         // Constraints
         // - Can't annotate a person twice
-        _ => !selectedAnnotations.some(ann => ann.speaker.id === selectedSpeaker.id)
+        _ => !selectedAnnotationsRef.current.some(ann => {
+                return ann.speaker.id === (selectedSpeakerRef.current || {}).id
+            }
+        )
     ]);
 
     // Setup Effects
@@ -62,26 +72,51 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
         }
     }, [ dragging ]);
 
+    useEffect(() => {
+        selectedSpeakerRef.current = selectedSpeaker;
+
+        if (selectedSpeaker && selectedSpeaker !== selectedAnnotationsRef.current[0]) {
+            if (selectedAnnotationsRef.current.length) {
+                dispatch({
+                    type: MOVE_ANNOTATION_TO_FRONT,
+                    value: selectedAnnotationsRef.current[0]
+                })
+            }
+        }
+
+    }, [ selectedSpeaker ]);
+
+    useEffect(() => {
+        selectedAnnotationsRef.current = selectedAnnotations;
+    }, [ selectedAnnotations ]);
+
     const updateAnnotation = function(index, updated) {
         dispatch({
             type: UPDATE_ANNOTATION,
             value: { index, updated }
         });
-        setEdits(NEEDS_SAVING);
     }
 
-    const handleSelect = function(selected) {
-        dispatch({
-            type: MOVE_ANNOTATION_TO_FRONT,
-            value: selected
-        })
+    useChange(() => {
+        setEdits(NEEDS_SAVING);
+    }, [ selectedAnnotations ]);
 
+    const handleSelect = function(selected) {
         const annotation = selectedAnnotations[selected];
         dispatch({
             type: SET_SELECTED_SPEAKER,
             value: annotation.speaker
         });
     };
+
+    const handleEdit = function(speaker) {
+
+
+        if (true || anyAnnotations(speaker, annotations)) {
+            setAdjusting(!adjusting);
+        }
+
+    }
 
     const saveAnnotations = async function() {
         dispatch({
@@ -92,32 +127,40 @@ const VideoAnnotator = function({ store, video, current, labels, onSelect }) {
         await project.saveAnnotations();
         setEdits(SAVED);
     }
-
+    
     return (
-        <KeyBindings state={state} dispatch={dispatch}>
-            <div ref={canvasRef} className={styles.drawer}>
-                { (edits != SAVED) &&
-                    <button onClick={saveAnnotations} className={styles.save}>
-                        { (edits == NEEDS_SAVING) && 'Save Annotations' }
-                        { (edits == SAVING) && 'Saving...' }
-                    </button>
+        <CanvasContext.Provider value={canvasRef}>
+            <KeyBindings state={state} dispatch={dispatch} callbacks={ { onEdit: handleEdit } }>
+                { adjusting
+                    ?
+                    <AdjustMode store={store}></AdjustMode>
+                    :
+                    <div ref={canvasRef} className={styles.drawer}>
+                        { (edits != SAVED) &&
+                            <button onClick={saveAnnotations} className={styles.save}>
+                                { (edits == NEEDS_SAVING) && 'Save Annotations' }
+                                { (edits == SAVING) && 'Saving...' }
+                            </button>
+                        }
+                        { selectedSpeaker && dragging &&
+                            <DragGuide { ...mousePosition } color={selectedSpeaker.color} /> }
+                        { selectedAnnotations.map((annotation, id) => 
+                            <Annotation
+                                key={annotation.speaker.id} {...annotation}
+                                index={id}
+                                canvas={canvasRef.current}
+                                selectedSpeaker={selectedSpeaker}
+                                onSelect={handleSelect}
+                                onChange={change => updateAnnotation(id, change)}
+                            />
+                        ) }
+                        <img className={styles.frame}
+                            src={project.frame(selectedCamera, selectedFrame)} />
+                    </div>
                 }
-                { selectedSpeaker && dragging &&
-                    <DragGuide { ...mousePosition } color={selectedSpeaker.color} /> }
-                { selectedAnnotations.map((annotation, id) => 
-                    <Annotation
-                        key={id} {...annotation}
-                        index={id}
-                        canvas={canvasRef.current}
-                        selectedSpeaker={selectedSpeaker}
-                        onSelect={handleSelect}
-                        onChange={change => updateAnnotation(id, change)}
-                    />
-                ) }
-                <img className={styles.frame} 
-                    src={project.frame(selectedScene, selectedCamera.key, selectedFrame)} />
-            </div>
-        </KeyBindings>
+                
+            </KeyBindings>
+        </CanvasContext.Provider>
     );
 };
 

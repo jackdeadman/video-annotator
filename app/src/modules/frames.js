@@ -53,31 +53,25 @@ const parseImagePath = path => {
     };
 }
 
-const generateImageFiles = async function(video, output, options) {
-    const defaults = { spacing: 5, amount: 100, fps: 20 };
-    options = Object.assign(defaults, options);
+const generateImageFiles = async function(video, output, sampleRate) {
 
     // ffmpeg -i <video> -vf fps=1/0.5 ample-project/frames/S20/U01/S20_U01_%d.jpg
-    const timingUnit = 1 / options.fps;
-    const pattern = path.join(output, 'S20_U01_{frame}.jpg');
+    // const timingUnit = 1 / options.fps;
+    const pattern = path.join(output, '{frame}.png');
 
     // const cmd = `ffmpeg -i ${video} -vf fps=1/${everyN} ${pattern}`;
     // const cmd = `ffmpeg -i ${video} -vf "select=not(mod(n\\,${options.spacing}))" -vsync vfr -q:v 2 -vframes ${options.amount} ${pattern}`
-    const cmd = `extract_frames --video ${video} --output ${pattern} --amount ${options.amount} --step ${options.spacing}`
-
+    const cmd = `extract_frames --video ${video} --output ${pattern} --sample_rate ${sampleRate}`
     // const cmd = `ffmpeg -i ${video} -vf fps=1/${everyN} -r 1 -vframes ${options.amount} ${pattern}`;
-    console.log(cmd)
     await exec(cmd)
     // await renameImages(outputDir, )
 };
 
-export async function extractFrames(videoPath, amount, spacing, outputDir) {
-    await emptyDir(outputDir);
+export async function extractFrames(videoPath, sampleRate, outputDir) {
+    // await emptyDir(outputDir);
 
     try {
-        await generateImageFiles(videoPath, outputDir, {
-            amount, spacing
-        });
+        await generateImageFiles(videoPath, outputDir, sampleRate);
     } catch(e) {
         return [];
     }

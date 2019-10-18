@@ -54,7 +54,6 @@ const responses = {
             annotations: Object.assign(state.annotations, { [frame]: annotations })
         };
     }
-
 };
 
 export default responses;

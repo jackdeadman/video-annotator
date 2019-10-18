@@ -11,7 +11,7 @@ import {
 const Speaker = (speaker, store, idx) => {
     const { state, dispatch } = store;
     const { selectedSpeaker } = state;
-    const isSelected = speaker === selectedSpeaker;
+    const isSelected = speaker.id === (selectedSpeaker || {}).id;
 
     return (
         <div

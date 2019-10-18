@@ -1,39 +1,54 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from video_helpers import Video
 import argparse
-from scipy.misc import imsave
+from imageio import imsave
 import cv2 as cv
-from joblib import Parallel, delayed
+import numpy as np
+
+FPS = 30
 
 def convert_color(image):
     return cv.cvtColor(image, cv.COLOR_BGR2RGB)
 
 
-def extract_frames(video, ouput_pattern, amount, step):
-
-    total = amount * step
+def extract_frames(video, ouput_pattern, sample_rate, method):
 
     with Video(video, mode='read') as video:
 
-        for frame_num in range(1, total, step):
-            video.seek(frame_num)
-            frame = convert_color(video.read())
-            filename = ouput_pattern.format(frame=frame_num)
-            imsave(filename, frame)
+        # Save a frame once x amount of frames have been seen. Actual time
+        # difference between the frames will depend on 
+        if method == 'frames':
+
+            for frame_num, frame in enumerate(video):
+                time = frame_num * (1/FPS)
+                print(frame_num, time)
+                if np.isclose(time%(sample_rate*60), 0):
+                    print('Saving...')
+                    frame = convert_color(frame)
+                    filename = ouput_pattern.format(frame=frame_num)
+                    imsave(filename, frame)
+        
+        elif method == 'time':
+            frame = video.read()
+            time = 0
+            while frame:
+
+                time += sample_rate * 60 * FPS
+                
+
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--video', required=True)
     parser.add_argument('--output', required=True)
-    parser.add_argument('--amount', required=True)
-    parser.add_argument('--step', required=True)
-
+    # In minutes
+    parser.add_argument('--sample_rate', required=True)
+    parser.add_argument('--method', default='frames')
     arguments = parser.parse_args()
 
     extract_frames(
         arguments.video,
         arguments.output,
-        int(arguments.amount),
-        int(arguments.step)
+        int(arguments.sample_rate)
     )

@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 
 import { REMOVE_ANNOTATION, SET_SELECTED_SPEAKER } from '../../constants/actionTypes';
-import { DELETE, ESCAPE } from '../../constants/keycodes';
+import { DELETE, ESCAPE, E_KEY } from '../../constants/keycodes';
 import { useKeyboard } from '../../hooks/keyboard';
 
-const KeyBindings = ({ children, state, dispatch }) => {
+const KeyBindings = ({ children, state, dispatch, callbacks }) => {
     const keyPressed = useKeyboard();
     const { annotations, speaker } = state;
     const selectedAnnotations = annotations[state.selectedFrame];
+    const { onEdit } = callbacks;
 
     useEffect(function() {
         switch (keyPressed) {
@@ -24,6 +25,9 @@ const KeyBindings = ({ children, state, dispatch }) => {
                     type: SET_SELECTED_SPEAKER,
                     value: null
                 })
+                break
+            case E_KEY:
+                onEdit(state.selectedSpeaker);
         }
     }, [keyPressed]);
 

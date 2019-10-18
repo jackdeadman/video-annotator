@@ -92,10 +92,6 @@ class Video:
         return self
     
     def __next__(self):
-        self.frame_no += 1
-        # Stops the video drifting
-        if self.frame_no % 10 == 0:
-            self.seek(self.frame_no)
         return self.__backend.__next__()
     
     def seek(self, frame_no):

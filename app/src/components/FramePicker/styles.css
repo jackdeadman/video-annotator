@@ -78,6 +78,10 @@
     cursor: pointer;
 }
 
+.box.selected {
+    background-color: #fff !important;
+}
+
 .box:hover {
     opacity: 0.8;
 }

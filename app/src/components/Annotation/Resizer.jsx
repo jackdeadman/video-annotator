@@ -1,37 +1,87 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import classNames from 'classnames';
 import styles from './styles.css';
-import { useMouseDrag } from '../../hooks/mouse';
-import { isEqualObjects } from '../../utils';
+import { useMousePositionRelative } from '../../hooks/mouse';
+import { isEqualObjects, diff } from '../../utils';
+import { CanvasContext } from '../../constants/contexts';
+import { calcResizeStyles, resizeBox } from '../../components/Annotation/helpers';
+import { useChange } from '../../hooks';
 
-const Handle = function({index, onResize}) {
+const Handle = function({ index, onDragStart, selected }) {
     const handle = useRef();
-    const { mousePosition, dragging } = useMouseDrag(handle.current);
-
-    useEffect(() => {
-        if (!isEqualObjects(mousePosition.start, mousePosition.end) && !dragging) {
-            onResize(index, mousePosition);
-            // onResize(index, mousePosition);
-        }
-    }, [ dragging ]);
 
     return (
-        <div ref={handle}
-            className={classNames(styles['handle'+(index+1)], styles.handle)}>
+        <div ref={handle} onMouseDown={() => onDragStart(index)}
+            className={classNames(
+                styles['handle'+(index+1)], styles.handle, {
+                    [styles.selected]: selected
+                })}
+        >
+            <div className={styles.handle__visible}></div>
         </div>
     );
 };
 
-const Resizer = function({start, end, onResize, corners=4}) {
-    const resizer = useRef();
+
+const Resizer = function({ start, end, onResize, corners=4}) {
+    const box = { start, end };
+    const canvas = useContext(CanvasContext);
+    const [ selected, setSelected ] = useState(null);
+    const selectedRef = useRef(selected);
+    const mousePosition = useMousePositionRelative(canvas.current);
+    const [ dragging, setDragging ] = useState(false);
+    const mouseStartRef = useRef(mousePosition)
+
+    const dragStart = function(index) {
+        setSelected(index);
+        selectedRef.current = index;
+        mouseStartRef.current = mousePosition;
+    }
+
+    useEffect(() => {
+        setDragging(selected !== null);
+    }, [selected]);
+
+    useEffect(() => {
+        function handleMouseUp() {
+            setSelected(null);
+        }
+        window.addEventListener('mouseup', handleMouseUp);
+        return () => window.removeEventListener('mouseup', handleMouseUp);
+    }, []);
+
+    useChange(() => {
+        if (!dragging) {
+            onResize(resizeBox({
+                originalBox: { start, end },
+                change: {
+                    start: mouseStartRef.current,
+                    end: mousePosition
+                }
+            }, selectedRef.current));
+        }
+    }, [ dragging ]);
+
+
+    let customStyles = {};
+    if (dragging && (selected !== null)) {
+        customStyles = calcResizeStyles({
+            originalBox: { start, end },
+            change: {
+                start: mouseStartRef.current,
+                end: mousePosition
+            }
+        }, selected);
+    }
 
     return (
-        <div className={styles.resizer}>
+        <section className={styles.resizer} style={customStyles}>
             { [...Array(corners).keys()].map(index => 
                 <Handle key={index} index={index}
-                    onResize={onResize}/>
+                    selected={selected==index}
+                    onDragStart={dragStart} />
             ) }
-        </div>
+        </section>
     )
 };
 

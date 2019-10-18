@@ -4,8 +4,6 @@ const ref = React.createRef();
 
 const useDelay = (delay, callback) => {
 
-    console.log('called...')
-
     useEffect(() => {
         const t = setTimeout(() => {
             callback();
@@ -23,7 +21,6 @@ const DelayedInput = ({ delay, onChange, value, ...props }) => {
     const [ intermediateValue, setIntermediateValue ] = useState(value);
 
     const increaseDelay = useDelay(delay, () => {
-        console.log('Finished')
         onChange(input.value);
     });
 

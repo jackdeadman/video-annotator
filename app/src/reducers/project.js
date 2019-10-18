@@ -5,12 +5,10 @@ import {
 const responses = {
 
     [SET_SELECTED_CAMERA](state, selectedCamera) {
-        console.log('Called')
         return { ...state, selectedCamera };
     },
 
     [SET_SELECTED_FRAME](state, selectedFrame) {
-        console.log('Selecting frame')
         return { ...state, selectedFrame };
     }
 
