@@ -4,7 +4,7 @@ import styles from './styles.css';
 import { useMousePositionRelative } from '../../hooks/mouse';
 import { isEqualObjects, diff } from '../../utils';
 import { CanvasContext } from '../../constants/contexts';
-import { calcResizeStyles, resizeBox } from '../../components/Annotation/helpers';
+import { calcResizeStyles, resizeBox, calcTranslateStyles, translateBox } from '../../components/Annotation/helpers';
 import { useChange } from '../../hooks';
 
 const Handle = function({ index, onDragStart, selected }) {
@@ -23,7 +23,7 @@ const Handle = function({ index, onDragStart, selected }) {
 };
 
 
-const Resizer = function({ start, end, onResize, corners=4}) {
+const Resizer = function({ start, end, onResize, corners=4, translating, translatePoints}) {
     const box = { start, end };
     const canvas = useContext(CanvasContext);
     const [ selected, setSelected ] = useState(null);
@@ -73,6 +73,23 @@ const Resizer = function({ start, end, onResize, corners=4}) {
             }
         }, selected);
     }
+
+    if (translating && !dragging) {
+        console.log('translating')
+        customStyles = calcTranslateStyles({
+            originalBox: { start, end },
+            change: translatePoints
+        });
+    }
+
+    useChange(() => {
+        if (!dragging) {
+            onResize(translateBox({
+                originalBox: { start, end },
+                change: translatePoints
+            }));
+        }
+    }, [ translating ]);
 
     return (
         <section className={styles.resizer} style={customStyles}>

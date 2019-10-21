@@ -11,7 +11,6 @@ const AdjustMode = function ({ store }) {
     } = state;
 
     const selectedAnnotation = annotations[selectedFrame][0] || null;
-    console.log(selectedAnnotation)
 
     const { project } = useContext(ProjectContext);
 

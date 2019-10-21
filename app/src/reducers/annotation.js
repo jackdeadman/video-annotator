@@ -34,7 +34,6 @@ const responses = {
     },
 
     [MOVE_ANNOTATION_TO_FRONT](state, index) {
-        console.log('Index: ', index)
         const frame = state.selectedFrame;
         const annotations = [...state.annotations[frame]];
         annotations.push(annotations.splice(index, 1)[0]);

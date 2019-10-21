@@ -14,7 +14,6 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
         switch (keyPressed) {
             // Delete annotation on delete keypress
             case DELETE:
-                console.log(selectedAnnotations, selectedSpeaker, state)
                 dispatch({
                     type: REMOVE_ANNOTATION,
                     value: selectedAnnotations.findIndex(

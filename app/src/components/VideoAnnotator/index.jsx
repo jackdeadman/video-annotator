@@ -77,7 +77,6 @@ const VideoAnnotator = function({ store }) {
 
         if (selectedSpeaker && selectedSpeaker !== selectedAnnotationsRef.current[0]) {
             if (selectedAnnotationsRef.current.length) {
-                console.log(selectedAnnotations, selectedSpeakerRef.current)
                 const index = selectedAnnotations.findIndex(
                     ann => ann.speaker.id === selectedSpeakerRef.current.id);
                 dispatch({
@@ -113,8 +112,6 @@ const VideoAnnotator = function({ store }) {
     };
 
     const handleEdit = function(speaker) {
-
-
         if (true || anyAnnotations(speaker, annotations)) {
             setAdjusting(!adjusting);
         }

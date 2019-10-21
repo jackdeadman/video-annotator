@@ -11,6 +11,25 @@ export const calcBoxStyles = function({ start, end }, color) {
     }
 }
 
+export const translateBox = ({ originalBox, change }) => {
+    const styles = calcTranslateStyles({ originalBox, change });
+    return adjustBoxWithStyles(originalBox, styles);
+};
+
+export const calcTranslateStyles = ({originalBox, change}) => {
+    const originalBoxStyles = calcBoxStyles(originalBox);
+    const dims = { width: originalBoxStyles.width, height: originalBoxStyles.height };
+    const movement = diff(change.end, change.start);
+
+    return {
+        position: 'relative',
+        backgroundColor: '#ccc',
+        ...dims,
+        left: movement.x,
+        top: movement.y
+    };
+};
+
 /**
  * 
  * @param {originalBox: annotated box, change: the delta position} 
