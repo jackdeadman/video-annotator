@@ -6,7 +6,7 @@ import { useKeyboard } from '../../hooks/keyboard';
 
 const KeyBindings = ({ children, state, dispatch, callbacks }) => {
     const keyPressed = useKeyboard();
-    const { annotations, speaker } = state;
+    const { annotations, selectedSpeaker } = state;
     const selectedAnnotations = annotations[state.selectedFrame];
     const { onEdit } = callbacks;
 
@@ -14,9 +14,11 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
         switch (keyPressed) {
             // Delete annotation on delete keypress
             case DELETE:
+                console.log(selectedAnnotations, selectedSpeaker, state)
                 dispatch({
                     type: REMOVE_ANNOTATION,
-                    value: selectedAnnotations.findIndex(ann => ann.speaker === speaker)
+                    value: selectedAnnotations.findIndex(
+                        ann => ann.speaker.id === selectedSpeaker.id)
                 })
                 break;
             // Blur

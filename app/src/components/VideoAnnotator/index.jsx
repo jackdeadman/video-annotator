@@ -77,9 +77,12 @@ const VideoAnnotator = function({ store }) {
 
         if (selectedSpeaker && selectedSpeaker !== selectedAnnotationsRef.current[0]) {
             if (selectedAnnotationsRef.current.length) {
+                console.log(selectedAnnotations, selectedSpeakerRef.current)
+                const index = selectedAnnotations.findIndex(
+                    ann => ann.speaker.id === selectedSpeakerRef.current.id);
                 dispatch({
                     type: MOVE_ANNOTATION_TO_FRONT,
-                    value: selectedAnnotationsRef.current[0]
+                    value: index
                 })
             }
         }
