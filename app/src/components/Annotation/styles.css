@@ -10,6 +10,10 @@
     z-index: 100;
 }
 
+.invisible {
+    background: none !important;
+}
+
 .resizer {
     position: absolute;
     border: 1px solid #ccc;
@@ -39,7 +43,7 @@
 }
 
 .handle.selected {
-    background: pink;
+    background: #ccc;
 }
 
 .handle__visible {
