@@ -36,6 +36,7 @@ const Annotation = function({ index, start, end, speaker, canvas, onChange, sele
             style={calcBoxStyles(box, speaker.color)}>
             { (dragging || selected) && <Resizer {...box} onResize={handleResize}
                                                             canvas={canvas}
+                                                            color={speaker.color}
                                                             translatePoints={mousePosition}
                                                             translating={dragging}/> }
         </div>

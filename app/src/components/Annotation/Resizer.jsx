@@ -23,7 +23,7 @@ const Handle = function({ index, onDragStart, selected }) {
 };
 
 
-const Resizer = function({ start, end, onResize, corners=4, translating, translatePoints}) {
+const Resizer = function({ start, end, onResize, corners=4, translating, translatePoints, color }) {
     const box = { start, end };
     const canvas = useContext(CanvasContext);
     const [ selected, setSelected ] = useState(null);
@@ -71,7 +71,7 @@ const Resizer = function({ start, end, onResize, corners=4, translating, transla
                 start: mouseStartRef.current,
                 end: mousePosition
             }
-        }, selected);
+        }, selected, color);
     }
 
     if (translating && !dragging) {
@@ -79,7 +79,7 @@ const Resizer = function({ start, end, onResize, corners=4, translating, transla
         customStyles = calcTranslateStyles({
             originalBox: { start, end },
             change: translatePoints
-        });
+        }, color);
     }
 
     useChange(() => {

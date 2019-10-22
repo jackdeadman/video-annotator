@@ -16,14 +16,14 @@ export const translateBox = ({ originalBox, change }) => {
     return adjustBoxWithStyles(originalBox, styles);
 };
 
-export const calcTranslateStyles = ({originalBox, change}) => {
+export const calcTranslateStyles = ({originalBox, change}, color) => {
     const originalBoxStyles = calcBoxStyles(originalBox);
     const dims = { width: originalBoxStyles.width, height: originalBoxStyles.height };
     const movement = diff(change.end, change.start);
 
     return {
         position: 'relative',
-        backgroundColor: '#ccc',
+        backgroundColor: color,
         ...dims,
         left: movement.x,
         top: movement.y
@@ -35,7 +35,7 @@ export const calcTranslateStyles = ({originalBox, change}) => {
  * @param {originalBox: annotated box, change: the delta position} 
  * @param {The corner that has been selected} selected 
  */
-export const calcResizeStyles = ({ originalBox, change }, selected) => {
+export const calcResizeStyles = ({ originalBox, change }, selected, color) => {
     const originalBoxStyles = calcBoxStyles(originalBox);
     const { start, end } = change;
 
@@ -94,7 +94,7 @@ export const calcResizeStyles = ({ originalBox, change }, selected) => {
 
     return {
         position: 'relative',
-        backgroundColor: '#ccc',
+        backgroundColor: color,
         ...dims,
         ...movement
     };
