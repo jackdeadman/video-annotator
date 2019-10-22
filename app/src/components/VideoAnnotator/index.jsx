@@ -48,10 +48,12 @@ const VideoAnnotator = function({ store }) {
     const [ adjusting, setAdjusting ] = useState(false);
 
     const { mousePosition, dragging } = useMouseDrag(canvasRef.current, [
+        // Can only drag if you select someone
+        _ => selectedSpeaker != null,
         // Constraints
         // - Can't annotate a person twice
         _ => !selectedAnnotationsRef.current.some(ann => {
-                return ann.speaker.id === (selectedSpeakerRef.current || {}).id
+                return ann.speaker.id === selectedSpeaker.id
             }
         )
     ]);

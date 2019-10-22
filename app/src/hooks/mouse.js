@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useChange } from './';
 
 export function useMousePosition() {
     const [ mousePosition, setMousePosition ] = useState({ x:0, y: 0 });
@@ -36,10 +37,9 @@ export function useMouseDrag(element, contraints=[]) {
 
     let [ startPosition, setStartPosition] = useState(null);
     const [ dragging, setDragging ] = useState(false);
-    let valid = true;
 
     const handleMouseDown = (e) => {
-        valid = contraints.every(fn => fn(mousePosition));
+        const valid = contraints.every(fn => fn(mousePosition));
         if (valid) {
             setStartPosition(ref.current);
         }
@@ -53,7 +53,8 @@ export function useMouseDrag(element, contraints=[]) {
         ref.current = mousePosition
     }, [ mousePosition ]);
 
-    useEffect(() => {
+    useChange(() => {
+        console.log("Setting mouse position")
         setDragging(true);
     }, [ startPosition ]);
 
