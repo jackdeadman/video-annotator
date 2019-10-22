@@ -36,8 +36,59 @@ const VideoAnnotator = function({ store }) {
         selectedCamera
     } = state;
 
-    const selectedAnnotations = annotations[selectedFrame] || [];
     const canvasRef = useRef();
+
+    // Requires the canvas to be loaded
+    function normaliseAnnotations(annotations) {
+        let givenList = true;
+        if (!annotations.length) {
+            annotations = [ annotations ];
+            givenList = false;
+        }
+
+        const global = annotations.map(ann => ({
+            ...ann,
+            start: {
+                x: ann.start.x / canvasRef.current.offsetWidth,
+                y: ann.start.y / canvasRef.current.offsetHeight
+            },
+            end: {
+                x: ann.end.x / canvasRef.current.offsetWidth,
+                y: ann.end.y / canvasRef.current.offsetHeight
+            }
+        }));
+
+        // Only return a list if a list was given
+        return givenList ? global : global[0];
+    }
+
+    // Requires the canvas to be loaded
+    function denormaliseAnnotations(annotations) {
+        let givenList = true;
+        if (!annotations.length) {
+            annotations = [ annotations ];
+            givenList = false;
+        }
+
+        const global = annotations.map(ann => ({
+            ...ann,
+            start: {
+                x: ann.start.x * canvasRef.current.offsetWidth,
+                y: ann.start.y * canvasRef.current.offsetHeight
+            },
+            end: {
+                x: ann.end.x * canvasRef.current.offsetWidth,
+                y: ann.end.y * canvasRef.current.offsetHeight
+            }
+        }));
+
+        // Only return a list if a list was given
+        return givenList ? global : global[0];
+    }
+    let selectedAnnotations = [];
+    if (canvasRef.current) {
+        selectedAnnotations = denormaliseAnnotations(annotations[selectedFrame]) || [];
+    }
 
     // These needs to be refs as they are used inside the closure.
     const selectedSpeakerRef = useRef(selectedSpeaker);
@@ -70,7 +121,9 @@ const VideoAnnotator = function({ store }) {
             if (selectedSpeaker) {
                 dispatch({
                     type: ADD_ANNOTATION,
-                    value: { ...normalise(mousePosition), speaker: selectedSpeaker }
+                    value: normaliseAnnotations({
+                        ...normalise(mousePosition),
+                        speaker: selectedSpeaker })
                 });
                 setEdits(NEEDS_SAVING);
             }
@@ -132,6 +185,8 @@ const VideoAnnotator = function({ store }) {
         await project.saveAnnotations();
         setEdits(SAVED);
     }
+
+
     
     return (
         <CanvasContext.Provider value={canvasRef}>
@@ -156,7 +211,8 @@ const VideoAnnotator = function({ store }) {
                                 canvas={canvasRef.current}
                                 selectedSpeaker={selectedSpeaker}
                                 onSelect={handleSelect}
-                                onChange={change => updateAnnotation(id, change)}
+                                onChange={change => 
+                                    updateAnnotation(id, normaliseAnnotations(change))}
                             />
                         ) }
                         <img className={styles.frame}
