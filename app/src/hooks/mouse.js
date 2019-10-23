@@ -16,7 +16,7 @@ export function useMousePosition() {
     return mousePosition;
 }
 
-export function useMousePositionRelative(element) {
+export function useMousePositionRelative(element, scale=1) {
     const mousePosition = useMousePosition();
     let offset = { x: 0, y: 0 }
 
@@ -26,8 +26,8 @@ export function useMousePositionRelative(element) {
     }
 
     return {
-        x: mousePosition.x - offset.x,
-        y: mousePosition.y - offset.y
+        x: (mousePosition.x - offset.x) / scale,
+        y: (mousePosition.y - offset.y) / scale
     };
 }
 

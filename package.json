@@ -4,7 +4,7 @@
   "description": "Electron + React 16 + Webpack 4 template.",
   "main": "main_process.js",
   "scripts": {
-    "bundle": "webpack --mode development --ignore=*.jpg",
+    "bundle": "webpack --mode development --ignore=*.jpg --ignore=projects/**/*",
     "serve": "electron . --allow-file-access-from-files",
     "start": "PATH=$PATH:app/src/bin npm-run-all --parallel bundle serve",
     "postinstall": "node node_modules/patch-package/index.js"

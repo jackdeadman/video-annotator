@@ -18,3 +18,28 @@
     right: 0;
     padding: 10px 20px;
 }
+
+.adjust-image {
+    position: absolute;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #ccc;
+}
+
+.no-speaker {
+    padding: 200px 0;
+}
+
+.point {
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 5px;
+   width: 5px;
+   border-radius: 50%;
+   background-color: yellow;
+   transform: translate(-50%, -50%);
+}

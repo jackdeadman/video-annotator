@@ -7,11 +7,12 @@ import { CanvasContext } from '../../constants/contexts';
 import { calcResizeStyles, resizeBox, calcTranslateStyles, translateBox } from '../../components/Annotation/helpers';
 import { useChange } from '../../hooks';
 
-const Handle = function({ index, onDragStart, selected }) {
+const Handle = function({ index, onDragStart, selected, scale }) {
     const handle = useRef();
 
     return (
         <div ref={handle} onMouseDown={() => onDragStart(index)}
+            style={{ transform: `scale(${scale})` }}
             className={classNames(
                 styles['handle'+(index+1)], styles.handle, {
                     [styles.selected]: selected
@@ -23,12 +24,12 @@ const Handle = function({ index, onDragStart, selected }) {
 };
 
 
-const Resizer = function({ start, end, onResize, corners=4, translating, translatePoints, color }) {
-    const box = { start, end };
+const Resizer = function({ start, end, onResize, corners=4,
+        translating, translatePoints, color, scale=1 }) {
     const canvas = useContext(CanvasContext);
     const [ selected, setSelected ] = useState(null);
     const selectedRef = useRef(selected);
-    const mousePosition = useMousePositionRelative(canvas.current);
+    const mousePosition = useMousePositionRelative(canvas.current, scale);
     const [ dragging, setDragging ] = useState(false);
     const mouseStartRef = useRef(mousePosition)
 
@@ -75,7 +76,6 @@ const Resizer = function({ start, end, onResize, corners=4, translating, transla
     }
 
     if (translating && !dragging) {
-        console.log('translating')
         customStyles = calcTranslateStyles({
             originalBox: { start, end },
             change: translatePoints
@@ -96,7 +96,7 @@ const Resizer = function({ start, end, onResize, corners=4, translating, transla
             { [...Array(corners).keys()].map(index => 
                 <Handle key={index} index={index}
                     selected={selected==index}
-                    onDragStart={dragStart} />
+                    onDragStart={dragStart} scale={1/scale}/>
             ) }
         </section>
     )

@@ -98,6 +98,31 @@
     position: absolute;
     right: 0;
     padding: 10px 20px;
+}
+
+._2CRgt1VnEiVErUEORzH80F {
+    position: absolute;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #ccc;
+}
+
+._3p2Q_synHXaSGtZ58v8z3F {
+    padding: 200px 0;
+}
+
+.nK3ebMRbkqkIiEN9VGsus {
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 5px;
+   width: 5px;
+   border-radius: 50%;
+   background-color: yellow;
+   transform: translate(-50%, -50%);
 }._2UL-TNEcieHw7pxAxHttqp {
     position: absolute;
     opacity: 0.6;

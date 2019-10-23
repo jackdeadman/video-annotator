@@ -41,7 +41,8 @@ const VideoAnnotator = function({ store }) {
     // Requires the canvas to be loaded
     function normaliseAnnotations(annotations) {
         let givenList = true;
-        if (!annotations.length) {
+        console.log(annotations.length)
+        if (annotations.length === undefined) {
             annotations = [ annotations ];
             givenList = false;
         }
@@ -64,11 +65,14 @@ const VideoAnnotator = function({ store }) {
 
     // Requires the canvas to be loaded
     function denormaliseAnnotations(annotations) {
+
         let givenList = true;
-        if (!annotations.length) {
+        if (annotations.length === undefined) {
             annotations = [ annotations ];
             givenList = false;
         }
+
+        console.log(annotations)
 
         const global = annotations.map(ann => ({
             ...ann,
@@ -87,7 +91,9 @@ const VideoAnnotator = function({ store }) {
     }
     let selectedAnnotations = [];
     if (canvasRef.current) {
-        selectedAnnotations = denormaliseAnnotations(annotations[selectedFrame]) || [];
+        console.log(annotations[selectedFrame])
+
+        selectedAnnotations = denormaliseAnnotations(annotations[selectedFrame] || []);
     }
 
     // These needs to be refs as they are used inside the closure.
@@ -159,7 +165,7 @@ const VideoAnnotator = function({ store }) {
 
     useChange(() => {
         setEdits(NEEDS_SAVING);
-    }, [ selectedAnnotations ]);
+    }, [ JSON.stringify(selectedAnnotations) ]);
 
     const handleSelect = function(selected) {
         const annotation = selectedAnnotations[selected];
@@ -193,7 +199,8 @@ const VideoAnnotator = function({ store }) {
             <KeyBindings state={state} dispatch={dispatch} callbacks={ { onEdit: handleEdit } }>
                 { adjusting
                     ?
-                    <AdjustMode store={store}></AdjustMode>
+                    <AdjustMode store={store}
+                                onChange={(id, change) => updateAnnotation(id, change)}></AdjustMode>
                     :
                     <div ref={canvasRef} className={styles.drawer}>
                         { (edits != SAVED) &&

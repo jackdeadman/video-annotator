@@ -13,7 +13,7 @@ const App = function() {
 
     // const [ projectBase, setProjectBase ] = useState(null);
     // const [ projectBase, setProjectBase ] = useState('/home/jack/Documents/tools/example-project');
-    const [ projectBase, setProjectBase ] = useState('projects/scene_21');
+    const [ projectBase, setProjectBase ] = useState('../projects/scene_21');
     // const [ projectBase, setProjectBase ] = useState(null);
     // const [ page, setPage ] = useState(CREATE_PROJECT);
     const [ creatingProject, setCreatingProject ] = useState(null);
