@@ -1,0 +1,41 @@
+#!/home/jack/anaconda3/bin/python
+
+import sys
+from pathlib import Path
+from PIL import Image
+from skimage.io import imsave
+import numpy as np
+import os
+
+
+def main(argv):
+    if len(argv) != 8:
+        return "Please specify: project_path, picture, speaker and x1 y1 x2 y2.", 1
+
+    project, picture, speaker, x1, y1, x2, y2 = argv[1:]
+
+    # Find image
+    annotations = Path(project) / 'annotations.json'
+
+    # Load the image and crop
+    img = np.array(Image.open(picture))
+    cropped = img[int(y1):int(y2), int(x1):int(x2)]
+
+    outname = Path(project) / Path('images') / Path(speaker + '.png') 
+
+    import os
+    if not os.path.exists(os.path.dirname(outname)):
+        os.makedirs(os.path.dirname(outname))
+
+    imsave(outname, cropped)
+    
+
+    return outname, 0
+
+if __name__ == '__main__':
+    msg, res = main(sys.argv)
+    
+    if msg:
+        print(msg)
+
+    sys.exit(res)

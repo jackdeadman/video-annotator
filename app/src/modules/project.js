@@ -36,6 +36,7 @@ export async function setupNewProject(location, project) {
     const speakers = 4;
     const base = path.join(location, slugify(project.projectName));
     await ensureDir(base);
+    await ensureDir(path.join(base, 'images'))
 
     const filesToSave = {
         project: path.join(base, 'project.json'),

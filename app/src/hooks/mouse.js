@@ -54,7 +54,6 @@ export function useMouseDrag(element, contraints=[]) {
     }, [ mousePosition ]);
 
     useChange(() => {
-        console.log("Setting mouse position")
         setDragging(true);
     }, [ startPosition ]);
 

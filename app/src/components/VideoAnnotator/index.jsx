@@ -41,7 +41,6 @@ const VideoAnnotator = function({ store }) {
     // Requires the canvas to be loaded
     function normaliseAnnotations(annotations) {
         let givenList = true;
-        console.log(annotations.length)
         if (annotations.length === undefined) {
             annotations = [ annotations ];
             givenList = false;
@@ -72,8 +71,6 @@ const VideoAnnotator = function({ store }) {
             givenList = false;
         }
 
-        console.log(annotations)
-
         const global = annotations.map(ann => ({
             ...ann,
             start: {
@@ -91,8 +88,6 @@ const VideoAnnotator = function({ store }) {
     }
     let selectedAnnotations = [];
     if (canvasRef.current) {
-        console.log(annotations[selectedFrame])
-
         selectedAnnotations = denormaliseAnnotations(annotations[selectedFrame] || []);
     }
 
@@ -107,7 +102,6 @@ const VideoAnnotator = function({ store }) {
     const { mousePosition, dragging } = useMouseDrag(canvasRef.current, [
         // Can only drag if you select someone
         function() {
-            console.log(selectedSpeaker, selectedSpeakerRef.current)
             return selectedSpeakerRef.current != null
         },
         // Constraints

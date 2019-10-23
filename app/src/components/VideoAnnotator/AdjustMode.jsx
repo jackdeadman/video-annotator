@@ -11,7 +11,7 @@ const AdjustMode = function ({ store, onChange }) {
 
 
     const [ scale, setScale ] = useState(4);
-    const [ mouthPos, setMouthPos ] = useState(null);
+    // const [ mouthPos, setMouthPos ] = useState(null);
 
     function denormaliseAnnotations(annotations) {
         let givenList = true;
@@ -74,6 +74,8 @@ const AdjustMode = function ({ store, onChange }) {
         height: height * 1080,
         backgroundImage: `url(${project.frame(selectedCamera, selectedFrame)})`,
         backgroundPosition: `-${left*1920}px -${top*1080}px`,
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'black',
         margin: '200px auto',
         position: 'relative',
         transform: `scale(${scale})`
@@ -91,7 +93,7 @@ const AdjustMode = function ({ store, onChange }) {
         const rect = e.target.getBoundingClientRect();
         const x = (e.clientX - rect.left) / scale;
         const y = (e.clientY - rect.top) / scale;
-        setMouthPos({ x, y });
+        selectedAnnotation.mouthPos = { x, y };
     };
 
 
@@ -105,7 +107,7 @@ const AdjustMode = function ({ store, onChange }) {
                         translating={false}
                         scale={scale}
                         />
-                { mouthPos && <Point {...mouthPos}></Point> }
+                { selectedAnnotation.mouthPos && <Point {...selectedAnnotation.mouthPos}></Point> }
             </div>
             <label>Zoom: { scale }</label><br />
             <input value={scale} type="range" min="1" max="8" step="0.1" onChange={e => setScale(e.target.value)}/>

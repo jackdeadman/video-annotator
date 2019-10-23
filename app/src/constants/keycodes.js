@@ -4,6 +4,7 @@ export const ESCAPE = 27;
 
 // Letters
 export const E_KEY = 69;
+export const P_KEY = 80;
 
 // Numbers
 export const ONE_KEY = 49;
