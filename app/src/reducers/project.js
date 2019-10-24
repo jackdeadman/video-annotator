@@ -16,7 +16,10 @@ const responses = {
         const index = state.speakers.findIndex(sp => sp.id === speaker.id);
 
         return { ...state,
-            speakers: Object.assign(state.speakers, { [index]: url })
+            speakers: Object.assign(state.speakers, { [index]: {
+                ...speaker,
+                image: url
+            } })
         };
     }
 

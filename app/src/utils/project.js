@@ -18,6 +18,5 @@ export const createSpeakerPicture = async function({
     ];
 
     const res = await exec("save_photo '" + args.join("' '") + "'");
-    console.log('Result', res)
-    return res
+    return res.trim()
 };

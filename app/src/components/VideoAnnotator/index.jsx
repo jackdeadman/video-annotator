@@ -123,6 +123,12 @@ const VideoAnnotator = function({ store }) {
                     type: ADD_ANNOTATION,
                     value: normaliseAnnotations({
                         ...normalise(mousePosition),
+                        // Default these to being true when a new annotation
+                        // is added. It can later be changed
+                        meta: {
+                            mouthVisible: true,
+                            faceVisible: true
+                        },
                         speaker: selectedSpeaker })
                 });
                 setEdits(NEEDS_SAVING);
@@ -186,7 +192,7 @@ const VideoAnnotator = function({ store }) {
         setEdits(SAVED);
     }
 
-
+    console.log('Selected: ', selectedAnnotations)
     
     return (
         <CanvasContext.Provider value={canvasRef}>

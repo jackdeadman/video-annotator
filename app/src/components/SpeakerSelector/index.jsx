@@ -10,9 +10,14 @@ import {
 
 const Speaker = (speaker, store, idx) => {
     const { state, dispatch } = store;
-    const { selectedSpeaker } = state;
+    const { selectedSpeaker, selectedFrame, annotations } = state;
+    
+    const selectedAnnotations = annotations[selectedFrame];
     const isSelected = speaker.id === (selectedSpeaker || {}).id;
-
+    const annotation = selectedAnnotations.find(ann => ann.speaker.id === speaker.id);
+    const hasAnAnnotation = annotation != undefined;
+    console.log('ANNOTATION123: ', annotation)
+    
     return (
         <div
             className={classNames(styles.speaker,{ [styles.selected]: isSelected })}
@@ -36,15 +41,25 @@ const Speaker = (speaker, store, idx) => {
             />
             
             <img src={speaker.image} alt={`Image of speaker ${speaker.id}`} />
+            
+            { hasAnAnnotation &&
+                <ul className={styles['checkboxes']}>
+                    <li><label>Face Visible? <input type="checkbox"
+                        checked={annotation.meta.faceVisible} /></label></li>
+                    <li><label>Mouth Visible? <input type="checkbox"
+                        checked={annotation.meta.mouthVisible}/></label></li>
+                </ul>
+            }
 
         </div>
     )
 };
 
-const SpeakerSelector = ({ store }) => (
-    <div>
+const SpeakerSelector = ({ store }) => {
+    console.log('Selector: ', store.state.speakers)
+    return (<div>
         { store.state.speakers.map((speaker, idx) => Speaker(speaker, store, idx)) }
-    </div>
-);
+    </div>)
+};
 
 export default SpeakerSelector;

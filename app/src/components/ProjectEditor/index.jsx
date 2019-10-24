@@ -12,12 +12,6 @@ import FramePicker from '../FramePicker';
 import { ProjectContext, EditorContext } from '../../constants/contexts';
 import { SET_SELECTED_CAMERA, SET_SELECTED_FRAME } from '../../constants/actionTypes';
 
-const defaultSpeakers = [
-    { id: 'Person 1', color: '#2c25d6', image: 'src/assets/images/person.jpg' },
-    { id: 'Person 2', color: '#368033', image: 'src/assets/images/person.jpg' },
-    { id: 'Person 3', color: '#ac2222', image: 'src/assets/images/person.jpg' },
-    { id: 'Person 4', color: '#ae9218', image: 'src/assets/images/person.jpg' }
-];
 
 const CameraSelector = function({ cameras, selected, onChange }) {
     return (
@@ -36,7 +30,7 @@ const ProjectEditor = function({ project, onProjectUpdate }) {
     const [ state, dispatch ] = useReducer(reducer, {
         annotations: project.annotations.markers,
         selectedSpeaker: null,
-        speakers: defaultSpeakers,
+        speakers: project.annotations.speakers,
         selectedCamera: project.cameras[0],
         selectedFrame: 0,
         project

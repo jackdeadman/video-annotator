@@ -1,21 +1,42 @@
 import path from 'path'
-import { object2array } from '../utils';
-import { format } from 'util';
-import { EmptyAnnotations } from './Annotations';
-import { readdir } from 'fs-extra';
+import { EmptyAnnotations, Annotations } from './Annotations';
+import { readdir, exists } from 'fs-extra';
+import { readFile } from '../utils';
+
+const PROJECT_FILE = 'project.json';
+const ANNOTATIONS_FILE = 'annotations.json';
 
 class Project {
 
-    constructor(projectFile, projectJSON) {
-        this.projectFile = projectFile;
-        this.projectJSON = projectJSON;
-
-        const defaultLocation = path.join(this.basePath, 'annotations.json');
-        this.annotations = new EmptyAnnotations(defaultLocation);
+    static async create(projectPath) {
+        const project = new Project(projectPath);
+        await project.init();
+        return project;
     }
 
-    get basePath() {
-        return path.dirname(this.projectFile);
+    constructor(basePath) {
+        this.basePath = basePath;
+    }
+
+    async init() {
+        this.projectFile = this.joinBase(PROJECT_FILE);
+        this.annotationsFile = this.joinBase(ANNOTATIONS_FILE);
+
+        if (!(await exists(this.projectFile))) {
+            throw new Error('No project file found: ', this.projectFile);
+        }
+
+        this.projectJSON = JSON.parse(await readFile(this.projectFile));
+
+        if (await exists(this.annotationsFile)) {
+            this.annotations = new Annotations(this.annotationsFile);
+        } else {
+            this.annotations = new EmptyAnnotations(this.annotationsFile);
+            await this.annotations.save();
+        }
+
+        console.log('Init annotations')
+        await this.annotations.init();
     }
 
     joinBase(...paths) {
@@ -49,6 +70,16 @@ class Project {
             this.projectJSON.scenes[scene], params);
         
         await this.save();
+    }
+
+    async saveSpeakerPictureUpdate(speaker, image) {
+        const index = this.annotations.speakers.findIndex(sp => sp.id === speaker.id);
+        this.annotations.speakers[index] = {
+            ...speaker,
+            image
+        };
+        console.log(this.annotations.json)
+        await this.annotations.save();
     }
 
     async save() {

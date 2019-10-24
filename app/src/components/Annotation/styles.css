@@ -12,6 +12,11 @@
 
 .invisible {
     background: none !important;
+    border: none !important;
+}
+
+.has-mouth-position {
+    border: 4px solid green;
 }
 
 .resizer {

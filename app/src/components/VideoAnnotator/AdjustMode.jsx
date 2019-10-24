@@ -87,13 +87,34 @@ const AdjustMode = function ({ store, onChange }) {
             end: { x: end.x / 1920, y: end.y / 1080 },
             selectedSpeaker
         });
+
+        // Need to redo mouth position if you resize
+        selectedAnnotation.mouthPos = null;
     };
 
+    function normalise(x, y) {
+        return {
+            x: x / (width * 1920),
+            y: y / (height * 1080)
+        };
+    }
+
+    function denormalise({x, y}) {
+        return {
+            x: x * width * 1920,
+            y: y * height * 1080
+        };
+    }
+
     function handleClick(e) {
-        const rect = e.target.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / scale;
-        const y = (e.clientY - rect.top) / scale;
-        selectedAnnotation.mouthPos = { x, y };
+        console.log(e.target.tagName)
+        // Avoid being triggered by the handles
+        if (e.target.tagName === 'SECTION') {
+            const rect = e.target.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / scale;
+            const y = (e.clientY - rect.top) / scale;
+            selectedAnnotation.mouthPos = normalise(x, y);
+        }
     };
 
 
@@ -107,7 +128,7 @@ const AdjustMode = function ({ store, onChange }) {
                         translating={false}
                         scale={scale}
                         />
-                { selectedAnnotation.mouthPos && <Point {...selectedAnnotation.mouthPos}></Point> }
+                { selectedAnnotation.mouthPos && <Point {...denormalise(selectedAnnotation.mouthPos)}></Point> }
             </div>
             <label>Zoom: { scale }</label><br />
             <input value={scale} type="range" min="1" max="8" step="0.1" onChange={e => setScale(e.target.value)}/>

@@ -10,6 +10,7 @@ import Resizer from './Resizer';
 const Annotation = function({
         index, start, end, speaker, canvas,
         onChange, selectedSpeaker, onSelect,
+        mouthPos
     }) {
 
     const ref = useRef();
@@ -27,12 +28,15 @@ const Annotation = function({
         onSelect(index);
     }
 
+    console.log('Speaker: ', speaker)
+
     return (
         <div
             ref={ref}
             onMouseDown={handleMouseDown}
             className={className({
-                [styles.invisible]: dragging
+                [styles.invisible]: dragging,
+                [styles['has-mouth-position']]: mouthPos != null
             }, styles.annotation)}
             style={{
                 background: '#ccc !important',

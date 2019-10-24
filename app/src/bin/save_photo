@@ -7,6 +7,11 @@ from skimage.io import imsave
 import numpy as np
 import os
 
+from random import choice
+from string import ascii_uppercase
+
+def gen_code(length=12):
+    return ''.join(choice(ascii_uppercase) for i in range(length))
 
 def main(argv):
     if len(argv) != 8:
@@ -21,15 +26,12 @@ def main(argv):
     img = np.array(Image.open(picture))
     cropped = img[int(y1):int(y2), int(x1):int(x2)]
 
-    outname = Path(project) / Path('images') / Path(speaker + '.png') 
+    outname = Path(project) / Path('images') / Path(gen_code() + '_' + speaker + '.png') 
 
-    import os
     if not os.path.exists(os.path.dirname(outname)):
         os.makedirs(os.path.dirname(outname))
 
     imsave(outname, cropped)
-    
-
     return outname, 0
 
 if __name__ == '__main__':

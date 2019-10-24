@@ -1,0 +1,39 @@
+{
+    "speakers": [
+        {
+            "id": "Person 1",
+            "color": "#368033",
+            "image": "src/assets/images/person.jpg"
+        },
+        {
+            "id": "Person 2",
+            "color": "#368033",
+            "image": "src/assets/images/person.jpg"
+        },
+        {
+            "id": "Person 3",
+            "color": "#368033",
+            "image": "src/assets/images/person.jpg"
+        },
+        {
+            "id": "Person 4",
+            "color": "#368033",
+            "image": "src/assets/images/person.jpg"
+        }
+    ],
+    "markers": {
+
+            "0": [{
+                "start": {
+                    "x": 0.4730464642481598,
+                    "y": 0.5479062863311744
+                },
+                "end": {
+                    "x": 0.500014787066246,
+                    "y": 0.6118574572330177
+                },
+                "speaker_id": "Person 1"
+            }
+        ]
+    }
+}

@@ -18,6 +18,10 @@
     background-color: #F9F8F7;
 }
 
+.speaker > input {
+    margin: auto;
+}
+
 .speaker > img {
     align-self: start;
     width: 100%;
@@ -32,4 +36,25 @@
     font-weight: 500;
     margin: 0 0 0.5rem 0;
     font-size: 1em;
+}
+
+.checkboxes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8em;
+    text-align: right;
+    padding: 10px 0;
+}
+
+.checkboxes input {
+    height: 15px;
+    width: 15px;
+    position: relative;
+    top: 4px;
+}
+
+.checkboxes li {
+    margin: 0;
+    padding: 0;
 }

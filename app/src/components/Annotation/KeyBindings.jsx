@@ -8,6 +8,7 @@ import {
 import { useKeyboard } from '../../hooks/keyboard';
 import { ProjectContext } from '../../constants/contexts';
 import { createSpeakerPicture } from '../../utils/project';
+import path from 'path';
 
 const KeyBindings = ({ children, state, dispatch, callbacks }) => {
     const keyPressed = useKeyboard();
@@ -38,7 +39,6 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
                 onEdit(state.selectedSpeaker);
                 break;
             case P_KEY:
-                console.log(project.basePath)
                 const url = await createSpeakerPicture({
                     project: project.basePath,
                     speaker: selectedSpeaker,
@@ -46,6 +46,9 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
                     annotation: selectedAnnotations.find(
                         an => an.speaker.id === selectedSpeaker.id)
                 });
+
+                await project.saveSpeakerPictureUpdate(selectedSpeaker, url);
+
                 dispatch({
                     type: SET_PICTURE,
                     value: {
