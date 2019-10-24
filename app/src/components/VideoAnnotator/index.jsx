@@ -17,7 +17,7 @@ import {
 import { ProjectContext, CanvasContext } from '../../constants/contexts';
 
 import { Annotation, DragGuide, KeyBindings } from '../../components/Annotation';
-import { normalise } from '../../components/Annotation/helpers';
+import { normalise, calcBoxStyles } from '../../components/Annotation/helpers';
 import AdjustMode from './AdjustMode';
 import { useChange } from '../../hooks/';
 
@@ -119,19 +119,23 @@ const VideoAnnotator = function({ store }) {
         if (!isEqualObjects(mousePosition.start, mousePosition.end) && !dragging) {
             // Finished dragging, add annotation if speaker has been selected
             if (selectedSpeaker) {
-                dispatch({
-                    type: ADD_ANNOTATION,
-                    value: normaliseAnnotations({
-                        ...normalise(mousePosition),
-                        // Default these to being true when a new annotation
-                        // is added. It can later be changed
-                        meta: {
-                            mouthVisible: true,
-                            faceVisible: true
-                        },
-                        speaker: selectedSpeaker })
-                });
-                setEdits(NEEDS_SAVING);
+                const boxStyles = calcBoxStyles(normalise(mousePosition));
+                const minSize = 15;
+                if (boxStyles.width > 15 && boxStyles.height > 15) {
+                    dispatch({
+                        type: ADD_ANNOTATION,
+                        value: normaliseAnnotations({
+                            ...normalise(mousePosition),
+                            // Default these to being true when a new annotation
+                            // is added. It can later be changed
+                            meta: {
+                                mouthVisible: true,
+                                faceVisible: true
+                            },
+                            speaker: selectedSpeaker })
+                    });
+                    setEdits(NEEDS_SAVING);
+                }
             }
         }
     }, [ dragging ]);

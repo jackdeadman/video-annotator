@@ -12,11 +12,10 @@ const Speaker = (speaker, store, idx) => {
     const { state, dispatch } = store;
     const { selectedSpeaker, selectedFrame, annotations } = state;
     
-    const selectedAnnotations = annotations[selectedFrame];
+    const selectedAnnotations = annotations[selectedFrame] || [];
     const isSelected = speaker.id === (selectedSpeaker || {}).id;
     const annotation = selectedAnnotations.find(ann => ann.speaker.id === speaker.id);
     const hasAnAnnotation = annotation != undefined;
-    console.log('ANNOTATION123: ', annotation)
     
     return (
         <div
