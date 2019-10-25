@@ -16,7 +16,6 @@ class AnnotationSerializer {
                 };
             });
         }
-        console.log(object)
         return object;
     }
 
@@ -30,14 +29,11 @@ class AnnotationSerializer {
             markers[frameNum] = annotations.map(annotation => {
                 // Whitelist of variables we want to store.
                 const { start, end, speaker, mouthPos, meta } = annotation;
-                console.log('DEBUG: ', annotations)
                 return {
                     start, end, speakerId: speaker.id, mouthPos, meta: meta || {}
                 };
             });
         }
-
-        console.log(JSON.stringify(object))
 
         return JSON.stringify(object);
     }
@@ -61,16 +57,11 @@ export class Annotations {
     }
 
     get markers() {
-        console.log('JSON: ', this.json)
         return this.json.markers;
     }
 
-    set markers(markers) {
-        this.json.markers = markers;
-    }
-
-    set speakers(speakers) {
-        this.json.speakers = speakers;
+    update(annotations) {
+        this.json.markers = annotations;
     }
 
     async save() {

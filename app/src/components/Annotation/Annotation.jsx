@@ -6,6 +6,7 @@ import { calcBoxStyles, insideBox, resizeBox } from './helpers';
 import { useMouseDrag } from '../../hooks/mouse';
 import { diff, add } from '../../utils';
 import Resizer from './Resizer';
+import { useChange } from '../../hooks';
 
 const Annotation = function({
         index, start, end, speaker, canvas,
@@ -18,17 +19,19 @@ const Annotation = function({
     const box = { start, end };
     let selected = speaker.id === (selectedSpeaker || {}).id;
 
-    const handleResize = (box) => {
-        onChange({
-            ...box, speaker
-        });
+    const handleResize = (newBox) => {
+
+        if (JSON.stringify(box) !== JSON.stringify(newBox)) {
+            onChange({
+                ...newBox, speaker
+            });
+        }
     };
+
 
     const handleMouseDown = () => {
         onSelect(index);
     }
-
-    console.log('Speaker: ', speaker)
 
     return (
         <div
@@ -42,7 +45,7 @@ const Annotation = function({
                 background: '#ccc !important',
                 ...calcBoxStyles(box, speaker.color)
             }}>
-            { (dragging || selected) && <Resizer {...box} onResize={handleResize}
+            { ((dragging || selected)) && <Resizer {...box} onResize={handleResize}
                                                             canvas={canvas}
                                                             color={speaker.color}
                                                             translatePoints={mousePosition}

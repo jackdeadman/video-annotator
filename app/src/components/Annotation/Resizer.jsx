@@ -60,6 +60,7 @@ const Resizer = function({ start, end, onResize, corners=4,
                     end: mousePosition
                 }
             }, selectedRef.current));
+            setSelected(null);
         }
     }, [ dragging ]);
 
@@ -76,6 +77,7 @@ const Resizer = function({ start, end, onResize, corners=4,
     }
 
     if (translating && !dragging) {
+
         customStyles = calcTranslateStyles({
             originalBox: { start, end },
             change: translatePoints
@@ -83,7 +85,7 @@ const Resizer = function({ start, end, onResize, corners=4,
     }
 
     useChange(() => {
-        if (!dragging) {
+        if (!translating && (selectedRef.current == null)) {
             onResize(translateBox({
                 originalBox: { start, end },
                 change: translatePoints

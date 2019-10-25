@@ -137,11 +137,11 @@
 
 ._3lfX-fPMH0QMZY6IB4W5LZ {
     background: none !important;
-    border: none !important;
+    box-shadow: none !important;
 }
 
 ._2qzxeYHgMLA8Mego4SuOXS {
-    border: 4px solid green;
+    box-shadow: 0 0 0 4px green
 }
 
 ._3-Uu35DU5dfsuUjYdNwA6z {

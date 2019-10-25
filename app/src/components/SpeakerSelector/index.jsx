@@ -1,21 +1,40 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from './styles.css';
 
 import classNames from 'classnames';
 import {
     SET_SELECTED_SPEAKER,
-    SET_SPEAKER_COLOR
+    SET_SPEAKER_COLOR,
+    SET_SPEAKER_META_DATA
 } from '../../constants/actionTypes';
 
 
-const Speaker = (speaker, store, idx) => {
+const Speaker = ({speaker, store, idx}) => {
     const { state, dispatch } = store;
     const { selectedSpeaker, selectedFrame, annotations } = state;
+
+    const faceElement = useRef();
+    const mouthElement = useRef();
     
     const selectedAnnotations = annotations[selectedFrame] || [];
     const isSelected = speaker.id === (selectedSpeaker || {}).id;
     const annotation = selectedAnnotations.find(ann => ann.speaker.id === speaker.id);
     const hasAnAnnotation = annotation != undefined;
+
+    function updateMetaData() {
+
+        dispatch({
+            type: SET_SPEAKER_META_DATA,
+            value: {
+                speaker,
+                frame: selectedFrame,
+                meta: {
+                    mouthVisible: mouthElement.current.checked,
+                    faceVisible: faceElement.current.checked
+                }
+            }
+        });
+    }
     
     return (
         <div
@@ -43,10 +62,18 @@ const Speaker = (speaker, store, idx) => {
             
             { hasAnAnnotation &&
                 <ul className={styles['checkboxes']}>
-                    <li><label>Face Visible? <input type="checkbox"
-                        checked={annotation.meta.faceVisible} /></label></li>
-                    <li><label>Mouth Visible? <input type="checkbox"
-                        checked={annotation.meta.mouthVisible}/></label></li>
+                    <li><label>Face Visible?
+                        <input type="checkbox"
+                            checked={annotation.meta.faceVisible}
+                            onChange={updateMetaData}
+                            ref={faceElement}
+                        /></label></li>
+                    <li><label>Mouth Visible?
+                        <input type="checkbox"
+                            checked={annotation.meta.mouthVisible}
+                            onChange={updateMetaData}
+                            ref={mouthElement}
+                        /></label></li>
                 </ul>
             }
 
@@ -55,9 +82,11 @@ const Speaker = (speaker, store, idx) => {
 };
 
 const SpeakerSelector = ({ store }) => {
-    console.log('Selector: ', store.state.speakers)
     return (<div>
-        { store.state.speakers.map((speaker, idx) => Speaker(speaker, store, idx)) }
+        { store.state.speakers.map((speaker, idx) =>
+        <Speaker key={speaker.id} speaker={speaker}
+                    store={store}
+                    idx={idx} />) }
     </div>)
 };
 

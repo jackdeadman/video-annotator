@@ -33,7 +33,7 @@ const VideoAnnotator = function({ store }) {
     const { state, dispatch } = store;
     const {
         annotations, selectedSpeaker, selectedFrame,
-        selectedCamera
+        selectedCamera, speakers
     } = state;
 
     const canvasRef = useRef();
@@ -169,7 +169,7 @@ const VideoAnnotator = function({ store }) {
 
     useChange(() => {
         setEdits(NEEDS_SAVING);
-    }, [ JSON.stringify(selectedAnnotations) ]);
+    }, [ JSON.stringify(selectedAnnotations), JSON.stringify(speakers)]);
 
     const handleSelect = function(selected) {
         const annotation = selectedAnnotations[selected];
@@ -192,11 +192,10 @@ const VideoAnnotator = function({ store }) {
             value: null
         });
         setEdits(SAVING)
-        await project.saveAnnotations();
+        project.update(state)
+        await project.save();
         setEdits(SAVED);
     }
-
-    console.log('Selected: ', selectedAnnotations)
     
     return (
         <CanvasContext.Provider value={canvasRef}>
@@ -209,7 +208,7 @@ const VideoAnnotator = function({ store }) {
                     <div ref={canvasRef} className={styles.drawer}>
                         { (edits != SAVED) &&
                             <button onClick={saveAnnotations} className={styles.save}>
-                                { (edits == NEEDS_SAVING) && 'Save Annotations' }
+                                { (edits == NEEDS_SAVING) && 'Save' }
                                 { (edits == SAVING) && 'Saving...' }
                             </button>
                         }

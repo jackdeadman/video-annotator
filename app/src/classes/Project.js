@@ -1,7 +1,7 @@
 import path from 'path'
 import { EmptyAnnotations, Annotations } from './Annotations';
 import { readdir, exists } from 'fs-extra';
-import { readFile } from '../utils';
+import { readFile, writeFile } from '../utils';
 
 const PROJECT_FILE = 'project.json';
 const ANNOTATIONS_FILE = 'annotations.json';
@@ -35,7 +35,6 @@ class Project {
             await this.annotations.save();
         }
 
-        console.log('Init annotations')
         await this.annotations.init();
     }
 
@@ -78,12 +77,20 @@ class Project {
             ...speaker,
             image
         };
-        console.log(this.annotations.json)
         await this.annotations.save();
     }
 
     async save() {
+        // Save the two files at the same time.
+        return Promise.all([
+            this.saveProject(),
+            this.saveAnnotations()
+        ]);
+    }
+
+    async saveProject() {
         const json = JSON.stringify(this.projectJSON);
+        return writeFile(this.projectFile, json);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(true);
@@ -93,6 +100,10 @@ class Project {
 
     async saveAnnotations() {
         return await this.annotations.save();
+    }
+
+    update({ annotations }) {
+        this.annotations.update(annotations);
     }
 
 

@@ -2,7 +2,8 @@ import {
     ADD_ANNOTATION,
     UPDATE_ANNOTATION,
     MOVE_ANNOTATION_TO_FRONT,
-    REMOVE_ANNOTATION
+    REMOVE_ANNOTATION,
+    SET_SPEAKER_META_DATA
 } from '../constants/actionTypes';
 
 const responses = {
@@ -28,12 +29,11 @@ const responses = {
                     { [frame]: (state.annotations[frame] || []).concat([annotation])}
                 )
         };
-        // Keep the project file up to date.
-        state.project.annotations.markers = newState.annotations;
         return newState;
     },
 
-    [MOVE_ANNOTATION_TO_FRONT](state, index) {
+    [MOVE_ANNOTATION_TO_FRONT](state, index, preventHistory) {
+        preventHistory();
         const frame = state.selectedFrame;
         const annotations = [...state.annotations[frame]];
         annotations.push(annotations.splice(index, 1)[0]);
@@ -55,6 +55,27 @@ const responses = {
         return {
             ...state,
             annotations: Object.assign(state.annotations, { [frame]: annotations })
+        };
+    },
+
+    [SET_SPEAKER_META_DATA](state, { speaker, meta }) {
+
+        const { annotations, selectedFrame } = state;
+        const selectedAnnotations = annotations[selectedFrame];
+        const index = selectedAnnotations.findIndex(ann => ann.speaker.id === speaker.id);
+
+        const updatedAnnotations = [...selectedAnnotations];
+        updatedAnnotations[index] = {
+            ...updatedAnnotations[index],
+            meta
+        };
+
+        return {
+            ...state,
+            annotations: {
+                ...annotations,
+                [selectedFrame]: updatedAnnotations
+            }
         };
     }
 };

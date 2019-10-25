@@ -107,7 +107,6 @@ const AdjustMode = function ({ store, onChange }) {
     }
 
     function handleClick(e) {
-        console.log(e.target.tagName)
         // Avoid being triggered by the handles
         if (e.target.tagName === 'SECTION') {
             const rect = e.target.getBoundingClientRect();

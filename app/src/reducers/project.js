@@ -4,11 +4,13 @@ import {
 
 const responses = {
 
-    [SET_SELECTED_CAMERA](state, selectedCamera) {
+    [SET_SELECTED_CAMERA](state, selectedCamera, preventHistory) {
+        preventHistory();
         return { ...state, selectedCamera };
     },
 
-    [SET_SELECTED_FRAME](state, selectedFrame) {
+    [SET_SELECTED_FRAME](state, selectedFrame, preventHistory) {
+        preventHistory();
         return { ...state, selectedFrame };
     },
 

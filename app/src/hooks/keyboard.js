@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
+
 export function useKeyboard(){
-    const [ keyPressed, setKeyPressed ] = useState(null);
+    const defaultKey = {
+        keyCode: null,
+        ctrlKey: false
+    };
+
+    const [ keyPressed, setKeyPressed ] = useState(defaultKey);
     
     function handleKeyDown(e) {
-        setKeyPressed(e.keyCode);
+        setKeyPressed(e);
     }
 
     function handleKeyUp(e) {
-        setKeyPressed(null);
+        setKeyPressed(defaultKey);
     }
 
     useEffect(() => {

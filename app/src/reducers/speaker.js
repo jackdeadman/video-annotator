@@ -5,7 +5,8 @@ import {
 
 const responses = {
 
-    [SET_SELECTED_SPEAKER](state, selectedSpeaker) {
+    [SET_SELECTED_SPEAKER](state, selectedSpeaker, preventHistory) {
+        preventHistory();
         return { ...state, selectedSpeaker };
     },
 
