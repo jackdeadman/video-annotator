@@ -3,10 +3,9 @@ import PreviewImage from './PreviewImage';
 import { LOADING } from '../../constants/symbols'
 
 import styles from './styles.css'
-import { EditorContext } from '../../constants/contexts';
+import { EditorContext, ProjectContext } from '../../constants/contexts';
 
 const FrameGrid = ({ frames, onSelect, selected }) => {
-
 
     if (frames == LOADING) {
         return <div>Loading...</div>
@@ -15,6 +14,10 @@ const FrameGrid = ({ frames, onSelect, selected }) => {
     if (frames.length === 0) {
         return <div>No frames</div>
     }
+
+
+    frames = frames.imageSets[frames.selected]
+    console.log(frames)
 
     return (
         <div className={styles.grid}>

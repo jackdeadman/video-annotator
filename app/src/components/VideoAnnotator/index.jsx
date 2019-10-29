@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import styles from './styles.css';
+import ImageLoader from 'react-loading-image';
 
 import { useMouseDrag } from '../../hooks/mouse';
 import { isEqualObjects } from '../../utils';
@@ -11,7 +12,7 @@ import {
 } from '../../constants/actionTypes';
 
 import {
-    SAVING, NEEDS_SAVING, SAVED
+    SAVING, NEEDS_SAVING, SAVED, LOADING, LOADED
 } from '../../constants/symbols';
 
 import { ProjectContext, CanvasContext } from '../../constants/contexts';
@@ -20,6 +21,7 @@ import { Annotation, DragGuide, KeyBindings } from '../../components/Annotation'
 import { normalise, calcBoxStyles } from '../../components/Annotation/helpers';
 import AdjustMode from './AdjustMode';
 import { useChange } from '../../hooks/';
+import ContextViewer from './ContextViewer';
 
 
 /**
@@ -37,6 +39,7 @@ const VideoAnnotator = function({ store }) {
     } = state;
 
     const canvasRef = useRef();
+    const [ loadingState, setLoadingState ] = useState(LOADING);
 
     // Requires the canvas to be loaded
     function normaliseAnnotations(annotations) {
@@ -199,6 +202,12 @@ const VideoAnnotator = function({ store }) {
         await project.save();
         setEdits(SAVED);
     }
+
+    useEffect(() => {
+        setLoadingState(LOADING);
+    }, [ selectedFrame, selectedCamera ]);
+
+    const showContext = true;
     
     return (
         <CanvasContext.Provider value={canvasRef}>
@@ -215,9 +224,9 @@ const VideoAnnotator = function({ store }) {
                                 { (edits == SAVING) && 'Saving...' }
                             </button>
                         }
-                        { selectedSpeaker && dragging &&
+                        { (loadingState == LOADED) && selectedSpeaker && dragging &&
                             <DragGuide { ...mousePosition } color={selectedSpeaker.color} /> }
-                        { selectedAnnotations.map((annotation, id) => 
+                        { (loadingState == LOADED) && selectedAnnotations.map((annotation, id) => 
                             <Annotation
                                 key={annotation.speaker.id} {...annotation}
                                 index={id}
@@ -228,8 +237,14 @@ const VideoAnnotator = function({ store }) {
                                     updateAnnotation(id, normaliseAnnotations(change))}
                             />
                         ) }
-                        <img className={styles.frame}
-                            src={project.frame(selectedCamera, selectedFrame)} />
+                        <ImageLoader
+                            className={styles.frame}
+                            src={project.frame(selectedCamera, selectedFrame)}
+                            onLoad={() => setLoadingState(LOADED)}
+                            loading={() => <div>Loading...</div>}
+                        />
+
+                        { showContext && <ContextViewer /> }
                     </div>
                 }
                 

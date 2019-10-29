@@ -22,16 +22,12 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
 
 
         if (ctrlKey) {
+            console.log(project)
 
             switch (keyCode) {
                 
                 case Z_KEY:
                     dispatch({ type: UNDO_ACTION });
-                    break
-                
-                case S_KEY:
-                    await project.save();
-                    alert('Saved...')
                     break
             }
 
@@ -87,7 +83,8 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
                     })
                     break;
                 case LEFT_KEY:
-                    var frames = await project.frames(selectedCamera)
+                    var frames = await project.frames(selectedCamera);
+                    frames = frames.imageSets[frames.selected];
                     var frameIndex = frames.findIndex(f => f.number === selectedFrame);
 
                     var newFrame = Math.max(0, frameIndex-1);
@@ -99,7 +96,8 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
                     break
 
                 case RIGHT_KEY:
-                    var frames = await project.frames(selectedCamera)
+                    var frames = await project.frames(selectedCamera);
+                    frames = frames.imageSets[frames.selected];
                     var frameIndex = frames.findIndex(f => f.number === selectedFrame);
 
                     var newFrame = Math.min(frames.length-1, frameIndex+1);
