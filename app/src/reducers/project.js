@@ -1,5 +1,5 @@
 import {
-    SET_SELECTED_CAMERA, SET_SELECTED_FRAME, SET_PICTURE
+    SET_SELECTED_CAMERA, SET_SELECTED_FRAME, SET_PICTURE, PREV_FRAME
 } from '../constants/actionTypes';
 
 const responses = {

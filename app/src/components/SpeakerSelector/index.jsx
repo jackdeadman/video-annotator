@@ -11,12 +11,12 @@ import {
 
 const Speaker = ({speaker, store, idx}) => {
     const { state, dispatch } = store;
-    const { selectedSpeaker, selectedFrame, annotations } = state;
+    const { selectedSpeaker, selectedFrame, selectedCamera, annotations } = state;
 
     const faceElement = useRef();
     const mouthElement = useRef();
     
-    const selectedAnnotations = annotations[selectedFrame] || [];
+    const selectedAnnotations = annotations[selectedCamera][selectedFrame] || [];
     const isSelected = speaker.id === (selectedSpeaker || {}).id;
     const annotation = selectedAnnotations.find(ann => ann.speaker.id === speaker.id);
     const hasAnAnnotation = annotation != undefined;

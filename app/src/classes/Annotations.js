@@ -8,13 +8,15 @@ class AnnotationSerializer {
         const markers = object.markers;
         
         // Add the speaker object reference using the speaker_id field
-        for (let [ frameNum, annotations ] of Object.entries(markers)) {
-            markers[frameNum] = annotations.map(annotation => {
-                return {
-                    ...annotation,
-                    speaker: object.speakers.find(sp => sp.id === annotation.speakerId)
-                };
-            });
+        for (let [ camera, cameraAnnotations ] of Object.entries(markers)) {
+            for (let [ frameNum, annotations ] of Object.entries(cameraAnnotations)) {
+                markers[camera][frameNum] = annotations.map(annotation => {
+                    return {
+                        ...annotation,
+                        speaker: object.speakers.find(sp => sp.id === annotation.speakerId)
+                    };
+                });
+            }
         }
         return object;
     }
@@ -25,16 +27,19 @@ class AnnotationSerializer {
         const markers = object.markers;
         // Remove the speaker object from the object as we just want to use the id.
         // Add the speaker object reference using the speaker_id field
-        for (let [ frameNum, annotations ] of Object.entries(markers)) {
-            markers[frameNum] = annotations.map(annotation => {
-                // Whitelist of variables we want to store.
-                const { start, end, speaker, mouthPos, meta } = annotation;
-                return {
-                    start, end, speakerId: speaker.id, mouthPos, meta: meta || {}
-                };
-            });
+        for (let [ camera, cameraAnnotations ] of Object.entries(markers)) {
+            console.log(camera, cameraAnnotations)
+            for (let [ frameNum, annotations ] of Object.entries(cameraAnnotations)) {
+                markers[camera][frameNum] = annotations.map(annotation => {
+                    // Whitelist of variables we want to store.
+                    const { start, end, speaker, mouthPos, meta } = annotation;
+                    return {
+                        start, end, speakerId: speaker.id, mouthPos, meta: meta || {}
+                    };
+                });
+            }
         }
-
+        
         return JSON.stringify(object);
     }
 

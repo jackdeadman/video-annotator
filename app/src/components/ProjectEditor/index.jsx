@@ -38,7 +38,7 @@ const ProjectEditor = function({ project, onProjectUpdate }) {
 
     const store = { state, dispatch };
 
-    const { selectedScene, selectedCamera } = state;
+    const { selectedCamera, selectedFrame } = state;
 
     function setActiveFrame(frameNum) {
         dispatch({
@@ -66,7 +66,8 @@ const ProjectEditor = function({ project, onProjectUpdate }) {
                                 value: camera
                             })}
                         />
-                        <FramePicker camera={selectedCamera} onChange={setActiveFrame} />
+                        <FramePicker frame={selectedFrame}
+                                camera={selectedCamera} onChange={setActiveFrame} />
                     </div>
                 </div>
             </EditorContext.Provider>

@@ -5,9 +5,8 @@ import { LOADING } from '../../constants/symbols'
 import styles from './styles.css'
 import { EditorContext } from '../../constants/contexts';
 
-const FrameGrid = ({ frames, onSelect }) => {
+const FrameGrid = ({ frames, onSelect, selected }) => {
 
-    const { state } = useContext(EditorContext);
 
     if (frames == LOADING) {
         return <div>Loading...</div>
@@ -24,7 +23,7 @@ const FrameGrid = ({ frames, onSelect }) => {
                         className={styles.framePreview}>
                     <PreviewImage src={`${frame.src}`}
                         frameNumber={frame.number}
-                        selected={state.selectedFrame.number == frame.number}/>
+                        selected={selected == frame.number}/>
                 </div>
             )) }
         </div>

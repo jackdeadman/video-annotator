@@ -36,7 +36,7 @@ class HistoryManager {
 
         this.undoing = false;
 
-        if (this.shouldSaveNext) {
+        if (!this.shouldSaveNext) {
             if (this.undoing) {
                 this.currentLookBack += 1;
             }

@@ -88,7 +88,7 @@ const VideoAnnotator = function({ store }) {
     }
     let selectedAnnotations = [];
     if (canvasRef.current) {
-        selectedAnnotations = denormaliseAnnotations(annotations[selectedFrame] || []);
+        selectedAnnotations = denormaliseAnnotations(annotations[selectedCamera][selectedFrame] || []);
     }
 
     // These needs to be refs as they are used inside the closure.
@@ -147,10 +147,13 @@ const VideoAnnotator = function({ store }) {
             if (selectedAnnotationsRef.current.length) {
                 const index = selectedAnnotations.findIndex(
                     ann => ann.speaker.id === selectedSpeakerRef.current.id);
-                dispatch({
-                    type: MOVE_ANNOTATION_TO_FRONT,
-                    value: index
-                })
+
+                if (index >= 0) {
+                    dispatch({
+                        type: MOVE_ANNOTATION_TO_FRONT,
+                        value: index
+                    })
+                }
             }
         }
 

@@ -1,17 +1,14 @@
 TODO
-- Resize is broken after being placed. Works perfectly for all other
-- Change between cameras and have separate annotations
 - Ability to play context to help with annotation
-- Show the current frame being annotated clearly
 - Switch between frames using keyboard.
 - Finally new project/open project flow
 
-- Fix bug with flickering when moving
-- Be consistent between using speaker_id and speaker_index
-
-DOING
-- UNDO (kinda)
 
 DONE
 - save metadata
 - Changer face border to be box shader to stop them being moved on click
+- UNDO (kinda)
+- Fix bug with flickering when moving
+- Show the current frame being annotated clearly
+- Change between cameras and have separate annotations
+- Resize is broken after being placed. Works perfectly for all other

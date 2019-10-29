@@ -54,11 +54,11 @@ const AdjustMode = function ({ store, onChange }) {
             </div>)
     }
 
-    const index = annotations[selectedFrame].findIndex(ann => (
+    const index = annotations[selectedCamera][selectedFrame].findIndex(ann => (
         ann.speaker.id === selectedSpeaker.id
     ));
 
-    const selectedAnnotation = annotations[selectedFrame][index];
+    const selectedAnnotation = annotations[selectedCamera][selectedFrame][index];
 
     if (!selectedAnnotation) {
         return (

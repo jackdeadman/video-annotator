@@ -7,11 +7,10 @@ import { extractFrames, loadFrames } from '../../modules/frames'
 import { ProjectContext } from '../../constants/contexts'
 import { LOADING } from '../../constants/symbols'
 
-import ParameterChanger from './PrameterChanger'
 import FrameGrid from './FrameGrid'
 
 
-const FramePicker = function ({ camera, onChange, }) {
+const FramePicker = function ({ camera, onChange, frame }) {
 
     const { project } = useContext(ProjectContext);
     const [ images, setImages ] = useState(LOADING);
@@ -24,7 +23,7 @@ const FramePicker = function ({ camera, onChange, }) {
 
     return (
         <div className={classNames(styles.main, {[styles.loading]: images == LOADING})}>
-            <FrameGrid frames={images} onSelect={onChange}/>
+            <FrameGrid selected={frame} frames={images} onSelect={onChange}/>
         </div>
     );
 };

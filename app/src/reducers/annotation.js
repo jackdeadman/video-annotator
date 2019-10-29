@@ -5,76 +5,93 @@ import {
     REMOVE_ANNOTATION,
     SET_SPEAKER_META_DATA
 } from '../constants/actionTypes';
+import { removeItem } from '../utils/immutable';
+
+const updateAnnotations = (state, fn) => {
+
+    const { selectedFrame, selectedCamera, annotations } = state;
+    const selectedAnnotations = annotations[selectedCamera][selectedFrame] || [];
+
+    return {
+        ...state,
+        annotations: {
+            ...annotations,
+            [selectedCamera]: {
+                ...annotations[selectedCamera],
+                [selectedFrame]: fn(selectedAnnotations)
+            }
+        }
+    };
+}
+
 
 const responses = {
     
     [UPDATE_ANNOTATION](state, { index, updated }) {
-        const frame = state.selectedFrame;
-        const annotations = state.annotations[frame];
-        
-        const updatedAnnotations = Object.assign([], annotations, {
-            [index]: { ...annotations[index], ...updated }
-        });
-        
-        return {
-            ...state,
-            annotations: Object.assign(state.annotations, { [frame]: updatedAnnotations })
-        };
+        return updateAnnotations(state, annotations => (
+            Object.assign(annotations, {
+                [index]: { ...annotations[index], ...updated }
+            })
+        ));
     },
 
     [ADD_ANNOTATION](state, annotation) {
-        const frame = state.selectedFrame;
-        const newState = { ...state,
-            annotations: Object.assign(state.annotations,
-                    { [frame]: (state.annotations[frame] || []).concat([annotation])}
-                )
-        };
-        return newState;
+
+        
+        return updateAnnotations(state, annotations => {
+            // Ensure a speaker does not have two annotations.
+            if (annotations.find(an => an.speaker.id == annotation.speaker.id)) {
+                return annotations;
+            }
+            
+            return [ ...annotations, annotation ]
+        });
     },
 
     [MOVE_ANNOTATION_TO_FRONT](state, index, preventHistory) {
         preventHistory();
-        const frame = state.selectedFrame;
-        const annotations = [...state.annotations[frame]];
-        annotations.push(annotations.splice(index, 1)[0]);
-        
-        return {
-            ...state,
-            annotations: Object.assign(state.annotations, { [frame]: annotations })
-        };
+        return updateAnnotations(state, annotations => (
+            [ ...removeItem(annotations, index), annotations[index] ]
+        ));
     },
 
     [REMOVE_ANNOTATION](state, index) {
-        const frame = state.selectedFrame;
-        const annotations = [...state.annotations[frame]];
-
-        if (index >= 0) {
-            annotations.splice(index, 1);
-        }
-
-        return {
-            ...state,
-            annotations: Object.assign(state.annotations, { [frame]: annotations })
-        };
+        return updateAnnotations(state, annotations => (
+            removeItem(annotations, index)
+        ));
     },
 
     [SET_SPEAKER_META_DATA](state, { speaker, meta }) {
+        return updateAnnotations(state, annotations => {
+            const index = annotations.findIndex(an => an.speaker.id === speaker.id);
 
-        const { annotations, selectedFrame } = state;
-        const selectedAnnotations = annotations[selectedFrame];
-        const index = selectedAnnotations.findIndex(ann => ann.speaker.id === speaker.id);
-
-        const updatedAnnotations = [...selectedAnnotations];
-        updatedAnnotations[index] = {
-            ...updatedAnnotations[index],
-            meta
-        };
+            return Object.assign(annotations, {
+                [index]: {
+                    ...annotations[index],
+                    meta
+                }
+            });
+        });
+        return state;
+        const { selectedFrame, selectedCamera, annotations } = state;
+        const selectedAnnotations = state.annotations[selectedCamera][selectedFrame];
+        const index = selectedAnnotations.findIndex(an => an.speaker.id === speaker.id);
+        const annotation = selectedAnnotations[index];
 
         return {
             ...state,
             annotations: {
                 ...annotations,
-                [selectedFrame]: updatedAnnotations
+                [selectedCamera]: Object.assign(annotations, {
+                    [selectedFrame]: Object.assign(
+                        selectedAnnotations, {
+                            [index]: { ...selectedAnnotations[index], ...{
+                                ...annotation,
+                                meta
+                            } }
+                        }
+                    )
+                })
             }
         };
     }
