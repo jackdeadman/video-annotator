@@ -16,7 +16,7 @@ const Speaker = ({speaker, store, idx}) => {
     const faceElement = useRef();
     const mouthElement = useRef();
     
-    const selectedAnnotations = annotations[selectedCamera][selectedFrame] || [];
+    const selectedAnnotations = annotations[selectedCamera][selectedFrame.number] || [];
     const isSelected = speaker.id === (selectedSpeaker || {}).id;
     const annotation = selectedAnnotations.find(ann => ann.speaker.id === speaker.id);
     const hasAnAnnotation = annotation != undefined;
@@ -27,7 +27,7 @@ const Speaker = ({speaker, store, idx}) => {
             type: SET_SPEAKER_META_DATA,
             value: {
                 speaker,
-                frame: selectedFrame,
+                frame: selectedFrame.number,
                 meta: {
                     mouthVisible: mouthElement.current.checked,
                     faceVisible: faceElement.current.checked

@@ -79,7 +79,17 @@
 
 ._3RrvtDD65zT24DYmyrqRpX li + li {
     margin-left: 5px;
-}._3B1lhZ7-ecgYBI1o5uOoF {
+}._29A6aW_70ZYxpbxe1v4qqO {
+    background-color: #eee;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    transform: translate(-50%);
+    display: inline-block;
+    border-radius: 5px;
+}
+
+._3B1lhZ7-ecgYBI1o5uOoF {
     width: 100%;
     height: 100%;
     display: block;
@@ -123,6 +133,10 @@
    border-radius: 50%;
    background-color: yellow;
    transform: translate(-50%, -50%);
+}
+
+.QlRhP-djT63AXKbY9Sb11 {
+    opacity: 0.7;
 }._2UL-TNEcieHw7pxAxHttqp {
     position: absolute;
     opacity: 0.6;
@@ -378,6 +392,10 @@
     -ms-user-select: none;
 }
 
+.btn-small {
+    padding: 2px 4px;
+}
+
 
 /*
  * Global CSS goes here, it requires to use :global before each style
@@ -400,6 +418,11 @@ body {
 
 .btn {
     padding: 10px 20px;
+}
+
+.hidden {
+    display: none;
+    visibility: hiddens;
 }
 
 h1 {

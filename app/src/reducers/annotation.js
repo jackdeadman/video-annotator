@@ -10,7 +10,7 @@ import { removeItem } from '../utils/immutable';
 const updateAnnotations = (state, fn) => {
 
     const { selectedFrame, selectedCamera, annotations } = state;
-    const selectedAnnotations = annotations[selectedCamera][selectedFrame] || [];
+    const selectedAnnotations = annotations[selectedCamera][selectedFrame.number] || [];
 
     return {
         ...state,
@@ -18,7 +18,7 @@ const updateAnnotations = (state, fn) => {
             ...annotations,
             [selectedCamera]: {
                 ...annotations[selectedCamera],
-                [selectedFrame]: fn(selectedAnnotations)
+                [selectedFrame.number]: fn(selectedAnnotations)
             }
         }
     };
@@ -72,28 +72,6 @@ const responses = {
                 }
             });
         });
-        return state;
-        const { selectedFrame, selectedCamera, annotations } = state;
-        const selectedAnnotations = state.annotations[selectedCamera][selectedFrame];
-        const index = selectedAnnotations.findIndex(an => an.speaker.id === speaker.id);
-        const annotation = selectedAnnotations[index];
-
-        return {
-            ...state,
-            annotations: {
-                ...annotations,
-                [selectedCamera]: Object.assign(annotations, {
-                    [selectedFrame]: Object.assign(
-                        selectedAnnotations, {
-                            [index]: { ...selectedAnnotations[index], ...{
-                                ...annotation,
-                                meta
-                            } }
-                        }
-                    )
-                })
-            }
-        };
     }
 };
 

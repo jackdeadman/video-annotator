@@ -28,7 +28,6 @@ class AnnotationSerializer {
         // Remove the speaker object from the object as we just want to use the id.
         // Add the speaker object reference using the speaker_id field
         for (let [ camera, cameraAnnotations ] of Object.entries(markers)) {
-            console.log(camera, cameraAnnotations)
             for (let [ frameNum, annotations ] of Object.entries(cameraAnnotations)) {
                 markers[camera][frameNum] = annotations.map(annotation => {
                     // Whitelist of variables we want to store.

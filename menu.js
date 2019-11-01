@@ -5,7 +5,12 @@ const template = [
     {
       label: 'File',
       submenu: [
-        {label: 'New Project'},
+        {
+          label: 'New Project',
+          click() {
+            
+          }
+        },
         {type: 'separator'},
         {label: 'Open labels file...'},
         {type: 'separator'},

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
+import classNames from 'classnames';
 import styles from './styles.css';
 import ImageLoader from 'react-loading-image';
 
@@ -22,6 +23,8 @@ import { normalise, calcBoxStyles } from '../../components/Annotation/helpers';
 import AdjustMode from './AdjustMode';
 import { useChange } from '../../hooks/';
 import ContextViewer from './ContextViewer';
+import PrefetchImages from '../helpers/PrefetchImages';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 
 /**
@@ -91,7 +94,7 @@ const VideoAnnotator = function({ store }) {
     }
     let selectedAnnotations = [];
     if (canvasRef.current) {
-        selectedAnnotations = denormaliseAnnotations(annotations[selectedCamera][selectedFrame] || []);
+        selectedAnnotations = denormaliseAnnotations(annotations[selectedCamera][selectedFrame.number] || []);
     }
 
     // These needs to be refs as they are used inside the closure.
@@ -124,7 +127,7 @@ const VideoAnnotator = function({ store }) {
             if (selectedSpeaker) {
                 const boxStyles = calcBoxStyles(normalise(mousePosition));
                 const minSize = 15;
-                if (boxStyles.width > 15 && boxStyles.height > 15) {
+                if (boxStyles.width > minSize && boxStyles.height > minSize) {
                     dispatch({
                         type: ADD_ANNOTATION,
                         value: normaliseAnnotations({
@@ -208,7 +211,7 @@ const VideoAnnotator = function({ store }) {
     }, [ selectedFrame, selectedCamera ]);
 
     const showContext = true;
-    
+
     return (
         <CanvasContext.Provider value={canvasRef}>
             <KeyBindings state={state} dispatch={dispatch} callbacks={ { onEdit: handleEdit } }>
@@ -218,6 +221,10 @@ const VideoAnnotator = function({ store }) {
                                 onChange={(id, change) => updateAnnotation(id, change)}></AdjustMode>
                     :
                     <div ref={canvasRef} className={styles.drawer}>
+                        {/* Prefetch frames in all the camera for faster cam switching */}
+                        { (selectedFrame.number !== null) && <PrefetchImages images={project.cameras.map(cam => {
+                            return project.frameSrc(cam, selectedFrame.number)
+                        })} /> }
                         { (edits != SAVED) &&
                             <button onClick={saveAnnotations} className={styles.save}>
                                 { (edits == NEEDS_SAVING) && 'Save' }
@@ -237,14 +244,23 @@ const VideoAnnotator = function({ store }) {
                                     updateAnnotation(id, normaliseAnnotations(change))}
                             />
                         ) }
-                        <ImageLoader
-                            className={styles.frame}
-                            src={project.frame(selectedCamera, selectedFrame)}
-                            onLoad={() => setLoadingState(LOADED)}
-                            loading={() => <div>Loading...</div>}
-                        />
-
-                        { showContext && <ContextViewer /> }
+                        {
+                            (selectedFrame.number !== null)&&
+                            <ImageLoader
+                                className={styles.frame}
+                                src={selectedFrame.src}
+                                onLoad={() => setLoadingState(LOADED)}
+                                loading={() =>
+                                    <div style={{
+                                        textAlign: 'center',
+                                        padding: '10px',
+                                        margin: 'auto'
+                                    }}>
+                                        <BounceLoader />
+                                    </div>}
+                            />
+                        }
+                        {/* { showContext && <ContextViewer /> } */}
                     </div>
                 }
                 

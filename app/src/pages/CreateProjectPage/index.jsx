@@ -1,13 +1,17 @@
 import React, { useState, useEffect }  from 'react'
-import { chooseFiles } from '../../utils/UI';
+import { chooseFiles, chooseFolder } from '../../utils/UI';
 
 const CreateProjectPage = function({ onCreate }) {
     const [ projectName, setProjectName ] = useState("");
-    const [ sampleRate, setSampleRate ] = useState(10);
     const [ files, setFiles ] = useState([]);
+    const [ location, setLocation ] = useState(__dirname);
 
     async function selectVideos() {
         setFiles(await chooseFiles());
+    }
+
+    async function selectLocation() {
+        setLocation(await chooseFolder());
     }
 
     return (
@@ -17,21 +21,18 @@ const CreateProjectPage = function({ onCreate }) {
                 <input placeholder="Project Name" value={projectName}
                     onChange={(e) => setProjectName(e.target.value)} />
             </div>
-            <button onClick={selectVideos} className="btn">Select Videos</button>
+            <button onClick={selectVideos} className="btn btn-small">Select Videos</button>
             <ul>
                 { files.map(file => (
                     <li key={file}>{ file }</li>
                 )) }
             </ul>
 
-            <div>
-                <label>Sample Rate (minutes): </label>
-                <input type="number" value={sampleRate}
-                    onChange={(e) => setSampleRate(Number(e.target.value))} />
-            </div>
-
-            <button onClick={() => onCreate({
-                projectName, sampleRate, files
+            <div>Location: {location} </div>
+            <button onClick={selectLocation} className="btn btn-small">Select Project Location</button>
+            <br />
+            <button onClick={() => onCreate(location, {
+                projectName, files
             })} className="btn">Create Project</button>
 
 

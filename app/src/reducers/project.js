@@ -1,5 +1,5 @@
 import {
-    SET_SELECTED_CAMERA, SET_SELECTED_FRAME, SET_PICTURE, PREV_FRAME
+    SET_SELECTED_CAMERA, SET_SELECTED_FRAME, SET_PICTURE, PREV_FRAME, SET_FRAME_STATUS
 } from '../constants/actionTypes';
 
 const responses = {
@@ -12,6 +12,16 @@ const responses = {
     [SET_SELECTED_FRAME](state, selectedFrame, preventHistory) {
         preventHistory();
         return { ...state, selectedFrame };
+    },
+
+    [SET_FRAME_STATUS](state, status) {
+        return {
+            ...state,
+            selectedFrame: {
+                ...state.selectedFrame,
+                completed: status
+            }
+        };
     },
 
     [SET_PICTURE](state, { speaker, url }) {

@@ -42,9 +42,9 @@ class HistoryManager {
             }
 
             this.history.push(JSON.parse(JSON.stringify(state)));
-            // if (this.history.length > this.depth) {
-            //     this.history.splice(0, 1);
-            // }
+            if (this.history.length > this.depth) {
+                this.history.splice(0, 1);
+            }
         }
         
     }

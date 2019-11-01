@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 import styles from './styles.css';
@@ -25,6 +25,11 @@ const CameraSelector = function({ cameras, selected, onChange }) {
     );
 }
 
+const EmptyFrame = {
+    number: null,
+    src: null
+};
+
 const ProjectEditor = function({ project, onProjectUpdate }) {
     // Setup Project State
     const [ state, dispatch ] = useReducer(reducer, {
@@ -32,20 +37,54 @@ const ProjectEditor = function({ project, onProjectUpdate }) {
         selectedSpeaker: null,
         speakers: project.annotations.speakers,
         selectedCamera: project.cameras[0],
-        selectedFrame: 0,
+        selectedFrame: EmptyFrame,
         project
     });
+
+    const framesRef = useRef(null);
+
+    async function loadFrames() {
+        if (framesRef.current == null) {
+            const frames = (await project.frames(state.selectedCamera)).imageSets;
+            framesRef.current = frames;
+        }
+
+        return framesRef.current;
+    }
+
+    useEffect(() => {
+        (async () => {
+            frames.current = framesRef;
+            dispatch({
+                type: SET_SELECTED_FRAME,
+                value: (await loadFrames())[selectedCamera][0]
+            });
+        })()
+    }, []);
 
     const store = { state, dispatch };
 
     const { selectedCamera, selectedFrame } = state;
 
-    function setActiveFrame(frameNum) {
+    function setActiveFrame(frame) {
         dispatch({
             type: SET_SELECTED_FRAME,
-            value: frameNum
+            value: frame
         });
     }
+
+    useEffect(() => {
+        (async () => {
+            const frames = (await loadFrames())[selectedCamera];
+            const index = frames.findIndex(f => f.number == selectedFrame.number);
+
+            if (index >= 0) {
+                setActiveFrame(frames[index]);
+            } else {
+                setActiveFrame(EmptyFrame);
+            }
+        })();
+    }, [ selectedCamera ]);
 
     return (
         <ProjectContext.Provider value={{ project, setProject: onProjectUpdate }}>

@@ -4,6 +4,8 @@ import ImageLoader from 'react-loading-image';
 import classNames from 'classnames';
 import styles from './styles.css';
 
+import BarLoader from 'react-spinners/BarLoader';
+
 const PreviewImage = ({ src, selected, frameNumber }) => {
     return (
         <div className={classNames(styles.box, { [styles.selected]: selected })}>
@@ -11,7 +13,7 @@ const PreviewImage = ({ src, selected, frameNumber }) => {
             <ImageLoader
                 src={src}
                 alt="test"
-                loading={() => <div></div>}
+                loading={() => <BarLoader />}
             />
         </div>
     );

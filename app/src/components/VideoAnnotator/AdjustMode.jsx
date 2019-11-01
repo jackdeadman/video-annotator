@@ -54,11 +54,11 @@ const AdjustMode = function ({ store, onChange }) {
             </div>)
     }
 
-    const index = annotations[selectedCamera][selectedFrame].findIndex(ann => (
+    const index = annotations[selectedCamera][selectedFrame.number].findIndex(ann => (
         ann.speaker.id === selectedSpeaker.id
     ));
 
-    const selectedAnnotation = annotations[selectedCamera][selectedFrame][index];
+    const selectedAnnotation = annotations[selectedCamera][selectedFrame.number][index];
 
     if (!selectedAnnotation) {
         return (
@@ -68,12 +68,13 @@ const AdjustMode = function ({ store, onChange }) {
     }
 
     const { width, height, top, left } = calcBoxStyles(selectedAnnotation);
+    console.log("backgroundPosition: ", `${-left*1920}px ${-top*1080}px`)
 
     const cropStyles = {
         width: width * 1920,
         height: height * 1080,
-        backgroundImage: `url(${project.frame(selectedCamera, selectedFrame)})`,
-        backgroundPosition: `-${left*1920}px -${top*1080}px`,
+        backgroundImage: `url(${selectedFrame.src})`,
+        backgroundPosition: `${-left*1920}px ${-top*1080}px`,
         backgroundRepeat: 'no-repeat',
         backgroundColor: 'black',
         margin: '200px auto',
@@ -129,8 +130,10 @@ const AdjustMode = function ({ store, onChange }) {
                         />
                 { selectedAnnotation.mouthPos && <Point {...denormalise(selectedAnnotation.mouthPos)}></Point> }
             </div>
-            <label>Zoom: { scale }</label><br />
-            <input value={scale} type="range" min="1" max="8" step="0.1" onChange={e => setScale(e.target.value)}/>
+            <div className={styles.zoom}>
+                <label>Zoom: { scale }</label><br />
+                <input value={scale} type="range" min="1" max="8" step="0.1" onChange={e => setScale(e.target.value)}/>
+            </div>
         </div>
     );
     

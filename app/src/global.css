@@ -19,6 +19,10 @@
     -ms-user-select: none;
 }
 
+:global .btn-small {
+    padding: 2px 4px;
+}
+
 
 /*
  * Global CSS goes here, it requires to use :global before each style
@@ -41,6 +45,11 @@
 
 :global .btn {
     padding: 10px 20px;
+}
+
+:global .hidden {
+    display: none;
+    visibility: hiddens;
 }
 
 h1 {

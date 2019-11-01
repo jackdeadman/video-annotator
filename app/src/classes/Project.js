@@ -46,7 +46,7 @@ class Project {
         return Object.keys(this.projectJSON.cameras);
     }
 
-    frame(camera, frameid) {
+    frameSrc(camera, frameid) {
         const filename = path.join(
             this.projectJSON.cameras[camera], `${frameid}.png`
         );
@@ -54,7 +54,6 @@ class Project {
     }
 
     async frames(camera) {
-        console.log('cam: ', camera)
         const imageSets = {};
 
         for (let [ camera, cameraPath ] of Object.entries(this.projectJSON.cameras)) {
@@ -64,40 +63,12 @@ class Project {
             })).sort((a, b) => a.number - b.number);
         }
 
-        console.log('IMAGE: ', imageSets)
-
         return {
             selected: camera,
             imageSets
         };
-
-        const camPath = this.projectJSON.cameras;
-        const images = await readdir(camPath);
-
-        console.log('Images: ', images)
-
-        for (let image of images) {
-            console.log(image)
-        }
-
-
-        
-        // const frames = images.map(im => ({
-        //     number: Number(im.split('.')[0]),
-        //     src: path.join(this.projectJSON.cameras[camera], im)
-        // })).sort((a, b) => a.number - b.number);
-        // return frames;
     }
 
-    // async frames(camera) {
-    //     const camPath = this.projectJSON.cameras[camera]
-    //     const images = await readdir(camPath);
-    //     const frames = images.map(im => ({
-    //         number: Number(im.split('.')[0]),
-    //         src: path.join(this.projectJSON.cameras[camera], im)
-    //     })).sort((a, b) => a.number - b.number);
-    //     return frames;
-    // }
 
     async saveFrameUpdate(video, params) {
         const { scene } = this.parseVideo(video);
@@ -127,11 +98,6 @@ class Project {
     async saveProject() {
         const json = JSON.stringify(this.projectJSON);
         return writeFile(this.projectFile, json);
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(true);
-            }, 2000);
-        });
     }
 
     async saveAnnotations() {

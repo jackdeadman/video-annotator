@@ -21,8 +21,6 @@ const FramePicker = function ({ camera, onChange, frame }) {
         })();
     }, [ camera ]);
 
-    console.log(images);
-
     return (
         <div className={classNames(styles.main, {[styles.loading]: images == LOADING})}>
             <FrameGrid camera={camera} selected={frame} frames={images} onSelect={onChange}/>

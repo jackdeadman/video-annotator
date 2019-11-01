@@ -11,15 +11,15 @@ import path from 'path';
 
 const App = function() {
 
-    // const [ projectBase, setProjectBase ] = useState(null);
+    const [ projectBase, setProjectBase ] = useState(null);
     // const [ projectBase, setProjectBase ] = useState('/home/jack/Documents/tools/example-project');
-    const [ projectBase, setProjectBase ] = useState(path.resolve('../projects/scene_21'));
+    // const [ projectBase, setProjectBase ] = useState(path.resolve('../projects/scene_21'));
     // const [ projectBase, setProjectBase ] = useState(null);
     // const [ page, setPage ] = useState(CREATE_PROJECT);
     const [ creatingProject, setCreatingProject ] = useState(null);
 
-    async function createProject(project) {
-        const base = await setupNewProject('projects', project);
+    async function createProject(location, project) {
+        const base = await setupNewProject(location, project);
         setProjectBase(base);
         setCreatingProject(false);
     }
@@ -37,7 +37,10 @@ const App = function() {
 
     return (
         <div>
-            <h1>Video Annotator</h1>
+            <h1>Video Annotator <button onClick={() => {
+                setProjectBase(null);
+                setCreatingProject(false);
+            }}>Home</button></h1>
             {(() => {
                 switch(page) {
                 case PROJECTS:

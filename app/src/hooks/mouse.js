@@ -58,13 +58,15 @@ export function useMouseDrag(element, contraints=[]) {
     }, [ startPosition ]);
 
     useEffect(() => {
-        if (!element) return;
-        element.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mouseup', handleMouseUp);
-        return () => {
-            element.removeEventListener('mousedown', handleMouseDown);
-            window.removeEventListener('mouseup', handleMouseUp);
-        };
+        if (element) {
+            element.addEventListener('mousedown', handleMouseDown);
+            window.addEventListener('mouseup', handleMouseUp);
+            return () => {
+                element.removeEventListener('mousedown', handleMouseDown);
+                window.removeEventListener('mouseup', handleMouseUp);
+            };
+        }
+        
     }, [ element ]);
 
     return {
