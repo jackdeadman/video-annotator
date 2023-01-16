@@ -1,4 +1,5 @@
 # Annotation tool
+![Alt text](tool_screenshot.png?raw=true "Optional Title")
 
 ## Run application
 ``` bash
