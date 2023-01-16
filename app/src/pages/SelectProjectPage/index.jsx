@@ -14,7 +14,7 @@ const SelectProjectPage = function({ onSelect, onNewProject }) {
 
     return (<div>
         <button onClick={loadProject} className="btn">Load project</button>
-        <button onClick={onNewProject} className="btn">Create project</button>
+        {/* <button onClick={onNewProject} className="btn">Create project</button> */}
     </div>)
 };
 

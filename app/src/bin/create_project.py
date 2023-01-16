@@ -18,7 +18,7 @@ def process_videos(project_name, video_path, sample_rate):
     time = 0
     fps = 30
 
-    output_dir = Path('../projects') / project_name
+    output_dir = Path('../../../projects') / project_name
     video_name = Path(video_path).name
 
     base = output_dir / 'frames' / video_name
@@ -61,8 +61,8 @@ def create_project_json(name):
 
         "cameras": {	
             Path(video).name: str(video.resolve())
-            for video in sorted((Path('../projects') / name / 'frames').iterdir())
-            if len(list((Path('../projects') / name / 'frames' / Path(video).name).iterdir())) > 0
+            for video in sorted((Path('../../../projects') / name / 'frames').iterdir())
+            if len(list((Path('../../../projects') / name / 'frames' / Path(video).name).iterdir())) > 0
         }	
 
     }
@@ -95,10 +95,10 @@ def create_annotation_json(name):
     "markers": {	
             Path(video).name: {
                 str(frame.name).replace('.png', ''): []
-                for frame in (Path('../projects') / name / 'frames' / Path(video).name).iterdir()
+                for frame in (Path('../../../projects') / name / 'frames' / Path(video).name).iterdir()
             }
-            for video in sorted((Path('../projects') / name / 'frames').iterdir())
-            if len(list((Path('../projects') / name / 'frames' / Path(video).name).iterdir())) > 0
+            for video in sorted((Path('../../../projects') / name / 'frames').iterdir())
+            if len(list((Path('../../../projects') / name / 'frames' / Path(video).name).iterdir())) > 0
         }	
 }
 
@@ -112,13 +112,13 @@ def main():
 
     json_contents = create_project_json(name)
 
-    with open(Path('../projects') / name / 'project.json', 'w') as f:
+    with open(Path('../../../projects') / name / 'project.json', 'w') as f:
         json.dump(json_contents, f, indent=4)
 
     
     json_contents = create_annotation_json(name)
 
-    with open(Path('../projects') / name / 'annotations.json', 'w') as f:
+    with open(Path('../../../projects') / name / 'annotations.json', 'w') as f:
         json.dump(json_contents, f, indent=4)
 
 
