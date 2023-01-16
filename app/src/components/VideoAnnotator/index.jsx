@@ -93,6 +93,7 @@ const VideoAnnotator = function({ store }) {
         return givenList ? global : global[0];
     }
     let selectedAnnotations = [];
+
     if (canvasRef.current) {
         selectedAnnotations = denormaliseAnnotations(annotations[selectedCamera][selectedFrame.number] || []);
     }

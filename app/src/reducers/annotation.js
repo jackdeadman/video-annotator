@@ -10,7 +10,8 @@ import { removeItem } from '../utils/immutable';
 const updateAnnotations = (state, fn) => {
 
     const { selectedFrame, selectedCamera, annotations } = state;
-    const selectedAnnotations = annotations[selectedCamera][selectedFrame.number] || [];
+    
+    let selectedAnnotations = annotations[selectedCamera][selectedFrame.number] || [];
 
     return {
         ...state,
@@ -37,7 +38,6 @@ const responses = {
 
     [ADD_ANNOTATION](state, annotation) {
 
-        
         return updateAnnotations(state, annotations => {
             // Ensure a speaker does not have two annotations.
             if (annotations.find(an => an.speaker.id == annotation.speaker.id)) {

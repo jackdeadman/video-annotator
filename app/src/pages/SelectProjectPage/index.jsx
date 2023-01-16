@@ -5,7 +5,9 @@ const SelectProjectPage = function({ onSelect, onNewProject }) {
 
     const loadProject = async () => {
         const folder = await chooseFolder();
+        console.log(folder)
         if (folder) {
+            console.log('Updating')
             onSelect(folder);
         }
     };

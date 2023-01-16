@@ -9,9 +9,8 @@
     "start": "PATH=$PATH:app/src/bin npm-run-all --parallel bundle serve",
     "postinstall": "node node_modules/patch-package/index.js"
   },
-  "author": "J. Renato Ramos González <renato.etc.etc.etc@gmail.com>",
-  "repository": "pastahito/electron-react-webpack",
-  "license": "WTFPL",
+  "author": "Jack Deadman",
+  "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",

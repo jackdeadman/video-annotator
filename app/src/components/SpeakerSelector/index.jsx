@@ -16,7 +16,7 @@ const Speaker = ({speaker, store, idx}) => {
     const faceElement = useRef();
     const mouthElement = useRef();
     
-    const selectedAnnotations = annotations[selectedCamera][selectedFrame.number] || [];
+    let selectedAnnotations = annotations[selectedCamera][selectedFrame.number] || [];
     const isSelected = speaker.id === (selectedSpeaker || {}).id;
     const annotation = selectedAnnotations.find(ann => ann.speaker.id === speaker.id);
     const hasAnAnnotation = annotation != undefined;

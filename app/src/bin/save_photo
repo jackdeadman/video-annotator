@@ -26,7 +26,7 @@ def main(argv):
     img = np.array(Image.open(picture))
     cropped = img[int(y1):int(y2), int(x1):int(x2)]
 
-    outname = Path(project) / Path('images') / Path(gen_code() + '_' + speaker + '.png') 
+    outname = Path(project).resolve() / Path('images') / Path(gen_code() + '_' + speaker + '.png') 
 
     if not os.path.exists(os.path.dirname(outname)):
         os.makedirs(os.path.dirname(outname))

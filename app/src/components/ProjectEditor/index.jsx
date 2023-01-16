@@ -31,6 +31,7 @@ const EmptyFrame = {
 };
 
 const ProjectEditor = function({ project, onProjectUpdate }) {
+    console.log(project)
     // Setup Project State
     const [ state, dispatch ] = useReducer(reducer, {
         annotations: project.annotations.markers,

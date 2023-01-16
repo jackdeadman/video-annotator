@@ -50,5 +50,6 @@ if __name__ == '__main__':
     extract_frames(
         arguments.video,
         arguments.output,
-        int(arguments.sample_rate)
+        int(arguments.sample_rate),
+        'frames'
     )

@@ -13,7 +13,9 @@ const KeyBindings = ({ children, state, dispatch, callbacks }) => {
     const { keyCode, ctrlKey } = useKeyboard();
     const { annotations, selectedSpeaker,
         speakers, selectedCamera, selectedFrame } = state;
-    const selectedAnnotations = annotations[selectedCamera][selectedFrame.number];
+    
+    let selectedAnnotations = annotations[selectedCamera][selectedFrame.number] || [];
+
     const { onEdit } = callbacks;
     const project = useContext(ProjectContext).project;
 

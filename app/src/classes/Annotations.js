@@ -6,10 +6,13 @@ class AnnotationSerializer {
     toObject(filecontents) {
         const object = JSON.parse(filecontents);
         const markers = object.markers;
+
+        console.log(markers)
         
         // Add the speaker object reference using the speaker_id field
         for (let [ camera, cameraAnnotations ] of Object.entries(markers)) {
             for (let [ frameNum, annotations ] of Object.entries(cameraAnnotations)) {
+                console.log(annotations)
                 markers[camera][frameNum] = annotations.map(annotation => {
                     return {
                         ...annotation,
